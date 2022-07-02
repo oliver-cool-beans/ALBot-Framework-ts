@@ -1,0 +1,40 @@
+{
+  "itemsToSell":  [
+    {"name": "hpbelt", "level": 0},
+    {"name": "crabclaw"}, 
+    {"name": "hpamulet", "level": 0}, 
+    {"name": "vitscroll"}, 
+    {"name": "stramulet", "level": 0}
+  ],
+  "itemsToExchange": [
+    {"name": "gem0"}, 
+    {"name": "gem1"},
+    {"name": "candy0"},
+    {"name": "candy1"}, 
+    {"name": "seashell"}, 
+    {"name": "armorbox"}, 
+    {"name": "weaponbox"}, 
+    {"name": "mysterybox"},
+    {"name": "goldenegg"}, 
+    {"name": "gemfragment"},
+    {"name": "lostearring", "level": 2}, 
+    {"name": "troll"}, 
+    {"name": "basketofeggs"}, 
+    {"name": "candycane"}, 
+    {"name": "mistletoe"}
+  ],
+  "itemsToCraft": [
+    "firestaff"
+  ], 
+  "itemsToRecycle": [
+    "staffofthedead", 
+    "bowofthedead",
+    "maceofthedead",
+    "swordofthedead", 
+    "fireblade", 
+    "daggerofthedead", 
+    "spearofthedead", 
+    "pmaceofthedead"
+  ],
+  "specialMonsters": ["greenjr", "jr", "wabbit", "skeletor", "mvampire", "snowman", "goldenbat", "phoenix"]
+}
