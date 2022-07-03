@@ -1,6 +1,12 @@
+import Bot from '../../Bot/index.js'
 import Loop from './Loop.js'
 
 export default class MoveLoop extends Loop {
+  constructor (bot: Bot) {
+    super(bot)
+    this.timeout = 0.5
+  }
+
   async loop (): Promise<void> {
     if (!this.bot.target) return
     if (Object.keys(this.bot.character.c).length) return
