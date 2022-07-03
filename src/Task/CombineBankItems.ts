@@ -132,7 +132,7 @@ export default class CombineBankItems extends Task {
     let itemArray: Array<ItemData>
     for (const i in character.items) {
       item = character.items[i]
-      if (!item || !item.level) continue
+      if (!item || item.level === undefined) continue
       if (!combinableFlattened.find((validItem) => typeof validItem !== 'number' && validItem.name === item.name && validItem.level === item.level)) {
         continue
       }
