@@ -60,7 +60,7 @@ export default class UpgradeBankItems extends Task {
   }
 
   isValidUpgradeable (item: ItemData): boolean {
-    if (!item || !item.level) return false
+    if (!item || item.level === undefined) return false
     return this.bot.AL.Game.G.items[item.name]?.upgrade &&
     item.level < this.levelCap &&
     !item.l
