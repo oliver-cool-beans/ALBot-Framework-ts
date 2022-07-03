@@ -156,7 +156,9 @@ export default class Bot {
     this.logger.info(`${this.name} disconnecting, waiting for all loops to finish`)
     await this.loopHandler.stopAll()
 
-    this.character && this.character.disconnect()
+    if (!this.character?.socket) return
+
+    this.character.disconnect()
     this.character = {}
     await this.wait(5)
     this.logger.info(`${this.name} finished disconnecting!`)
