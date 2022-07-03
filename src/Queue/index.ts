@@ -11,8 +11,8 @@ export default class Queue {
   }
 
   private sortQueue (): void {
-    this.queue = this.queue.sort((a, b) => (a.priority || 99) - (b.priority || 99))
-    this.partyQueue = this.partyQueue.sort((a, b) => (a.priority || 99) - (b.priority || 99))
+    // this.queue = this.queue.sort((a, b) => (a.priority || 99) - (b.priority || 99))
+    // this.partyQueue = this.partyQueue.sort((a, b) => (a.priority || 99) - (b.priority || 99))
   }
 
   getQueue (): Array<Task> {
