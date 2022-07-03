@@ -4,7 +4,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "watch": "nodemon ./build/src/index.js"
+    "watch": "nodemon ./build/src/index.js",
+    "start": "node ./build/src/indexjs"
   },
   "repository": {
     "type": "git",
