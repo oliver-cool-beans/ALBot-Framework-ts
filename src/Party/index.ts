@@ -15,7 +15,7 @@ export default class Party {
   }
 
   private getCorrectServer (member) {
-    if (!member.character?.serverData) return null
+    if (!member.character?.serverData) return {}
     const runningTask = member.queue.getRunningTask() || {}
     const { name: memberServerIdentifier, region: memberServerRegion } = member.character.serverData
     return {
