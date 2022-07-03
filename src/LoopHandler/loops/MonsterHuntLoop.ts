@@ -4,7 +4,6 @@ import FinishMonsterHunt from '../../Task/FinishMonsterHunt.js'
 import MonsterHunt from '../../Task/MonsterHunt.js'
 import Bot from '../../Bot/index.js'
 import { botConfig } from '../../types/index.js'
-import { MonsterName } from 'alclient'
 
 export default class MonsterHuntLoop extends Loop {
   botConfig: botConfig
@@ -13,7 +12,7 @@ export default class MonsterHuntLoop extends Loop {
     this.botConfig = this.bot.config
   }
 
-  monsterHuntExcluded (name: MonsterName) {
+  monsterHuntExcluded (name: string) {
     const mhConfig = this.botConfig?.monsters?.monsterHuntExclude || []
     return mhConfig.includes(name)
   }

@@ -1,6 +1,6 @@
 import { loop as loopType } from '../../types/index.js'
 import Bot from '../../Bot/index.js'
-import { Entity, MonsterName } from 'alclient'
+import { Entity } from 'alclient'
 
 export default class Loop implements loopType {
   status: 'started' | 'running' | 'stopping' | 'stopped'
@@ -43,7 +43,7 @@ export default class Loop implements loopType {
     this.bot.logger.info(`${this.bot.name} stopped loop ${this.constructor.name}`)
   }
 
-  private getStrategyName (monsterName: MonsterName, strategyType): string {
+  private getStrategyName (monsterName: string, strategyType): string {
     return this.bot?.config?.monsters?.strategies?.[monsterName]?.[strategyType]
   }
 

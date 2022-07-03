@@ -7,6 +7,7 @@ import Gather from '../../Task/Gather.js'
 import schedule from 'node-schedule'
 import CombineBankItems from '../../Task/CombineBankItems.js'
 import UpgradeBankItems from '../../Task/UpgradeBankItems.js'
+import BuyItems from '../../Task/BuyItems.js'
 
 async function preLoadFunctions (bot: Bot): Promise<void> {
 }
@@ -39,7 +40,15 @@ function scheduleBankTasks (bot): void {
   const bankItemsTask = new BankItems(bot, 0, bot.getServerIdentifier(), bot.getServerRegion(), [], [], bankArgs)
   const combineTask = new CombineBankItems(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
   const upgradeTask = new UpgradeBankItems(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
+
+  const buyTaskArgs = { itemsToBuy: bot.config.itemsToBuy || [] }
+  const buyTask = new BuyItems(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [], [], buyTaskArgs)
+
+  schedule.scheduleJob('*/15 * * * *', () => bot.queue.addTask(buyTask))
+  schedule.scheduleJob('*/16 * * * *', () => bot.queue.addTask(upgradeTask))
+  schedule.scheduleJob('*/17 * * * *', () => bot.queue.addTask(combineTask))
   bot.queue.addTask(upgradeTask)
+  bot.queue.addTask(combineTask)
 }
 
 function scheduleGatheringTasks (bot): void {

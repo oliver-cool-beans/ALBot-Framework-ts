@@ -5,7 +5,7 @@ import LoopHandler from '../LoopHandler/index.js'
 import loops from '../LoopHandler/loops/index.js'
 import mage from './mage/index.js'
 import merchant from './merchant/index.js'
-import { Entity, IPosition, ItemName, MapName, MonsterName, NPCName, ServerIdentifier, ServerRegion, SmartMoveOptions } from 'alclient'
+import { Entity, IPosition, ItemName, MapName, NPCName, ServerIdentifier, ServerRegion, SmartMoveOptions } from 'alclient'
 import { attackStrategies, defenceStrategies, moveStrategies } from '../strategies/index.js'
 
 const characterFunctions: any = { mage, merchant }
@@ -25,7 +25,7 @@ export default class Bot {
   queue: Queue
   discord: any
   loopOverrideList? : Array<string>
-  monster: MonsterName
+  monster: string
   elixirs: Array<string>
   strategies: Strategies
   target: any
@@ -178,9 +178,9 @@ export default class Bot {
     return await new Promise(resolve => setTimeout(resolve, time * 1000))
   }
 
-  async easyMove (to: IPosition | ItemName | MapName | MonsterName | NPCName, options: SmartMoveOptions = {}): Promise<IPosition> {
+  async easyMove (to: IPosition | ItemName | MapName | string | NPCName, options: SmartMoveOptions = {}): Promise<IPosition> {
     if (this.character.ctype === 'mage') options.useBlink = true
-    if (this.character.stand) await this.character.openMerchantStand()
+    if (this.character.stand) await this.character.closeMerchantStand()
     return await this.character.smartMove(to, options)
   }
 

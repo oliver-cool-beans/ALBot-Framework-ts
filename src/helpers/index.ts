@@ -1,4 +1,4 @@
-import AL, { BankInfo, IPosition, ItemData, ItemName, MonsterName } from 'alclient'
+import AL, { BankInfo, IPosition, ItemData, ItemName } from 'alclient'
 import Bot from '../Bot/index.js'
 import monsters from '../monsters/index.js'
 
@@ -18,7 +18,7 @@ export function sortClosestDistance (to: any) {
   }
 }
 
-export function getMonsterHandlerName (monsterName: MonsterName): string {
+export function getMonsterHandlerName (monsterName: string): string {
   return monsters[monsterName] ? monsterName : 'DefaultMonsterHandler'
 }
 
@@ -76,8 +76,33 @@ export async function findWithdrawBank (bot: Bot, items: Array<ItemData>): Promi
   })
 
   for (const i in bankWithdrawMap) {
-    bot.logger.info(`${bot.name} withdrawing ${bankWithdrawMap[i]}`)
+    bot.logger.info(`${bot.name} withdrawing ${bankWithdrawMap[i].item.name}`)
     await character.withdrawItem(bankWithdrawMap[i].slot, bankWithdrawMap[i].index, character.getFirstEmptyInventorySlot())
     await bot.wait(0.25)
   }
+}
+
+export function findClosestVendor (bot: Bot, item: ItemName) {
+  const { maps: gMaps, npcs: gNpcs } = bot.AL.Game.G
+  return Object.values(gMaps).reduce((npc: any, map: any) => {
+    const closestNpcList: Array<any> = Object.values(map.npcs).sort((a: any, b: any) => {
+      if (!a.position) {
+        return -1
+      }
+      const compareA = { map: map.name, x: a.position[0], y: a.position[1] }
+      const compareB = { map: map.name, x: b.position[0], y: b.position[1] }
+      return AL.Tools.distance(bot.character.character, compareA) - AL.Tools.distance(bot.character.character, compareB)
+    }).filter((npc: any) => gNpcs[npc.id].items && gNpcs[npc.id].items.includes(item)) // Filter only npc's with the item we want
+
+    if (!closestNpcList.length) return npc
+
+    const closestDistance = AL.Tools.distance(bot.character.character, { map: map.name, x: closestNpcList[0].position[0], y: closestNpcList[0].position[1] })
+    if (!npc.distance || closestDistance < npc.distance) {
+      npc = {
+        npc: closestNpcList[0],
+        distance: closestDistance
+      }
+    }
+    return npc
+  }, { distance: null, npc: {} })
 }

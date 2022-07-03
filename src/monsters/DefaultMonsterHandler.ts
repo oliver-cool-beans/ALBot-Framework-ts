@@ -1,13 +1,13 @@
 import Bot from '../Bot/index.js'
-import { Entity, IPosition, MonsterName } from 'alclient'
+import { Entity, IPosition } from 'alclient'
 import { sortClosestDistance } from '../helpers/index.js'
 
 export default class DefaultMonsterHandler {
   targetData: Entity | undefined
   bot: Bot
   rallyPosition: IPosition | undefined
-  mtypes: Array<MonsterName>
-  constructor (bot: Bot, mtypes?: Array<MonsterName>, rallyPosition?: IPosition) {
+  mtypes: Array<string>
+  constructor (bot: Bot, mtypes?: Array<string>, rallyPosition?: IPosition) {
     this.bot = bot
     this.mtypes = mtypes || [bot.monster]
     if (this.rallyPosition) this.rallyPosition = rallyPosition
