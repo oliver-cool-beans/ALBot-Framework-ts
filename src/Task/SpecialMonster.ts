@@ -7,15 +7,21 @@ export default class SpecialMonster extends Task {
     return targets[0]
   }
 
+  stopIfTrue (targetData): boolean {
+    return !this.bot.queue.findTaskById(this.id) ||
+    !!this.bot.character.entities.get(targetData.id)
+  }
+
   async loop (): Promise<void> {
     const { targetData } = this.args
     if (!targetData) return
+
     if (this.bot.target !== targetData.id) this.bot.setTarget(null)
 
     let target = this.bot.target ? this.bot.character.entities.get(this.bot.target) : this.findTarget(targetData)
     if (!target) {
       target = this.bot.party.findMemberWithTarget(targetData.id)
-      target && await this.bot.easyMove(target)
+      target && await this.bot.easyMove(target, { stopIfTrue: () => this.stopIfTrue(targetData) })
     }
 
     if (target && !this.bot.target) {
@@ -36,6 +42,6 @@ export default class SpecialMonster extends Task {
       }
     }
 
-    await this.bot.easyMove({ map: targetData.map, x: targetData.x, y: targetData.y })
+    await this.bot.easyMove({ map: targetData.map, x: targetData.x, y: targetData.y }, { stopIfTrue: () => this.stopIfTrue(targetData) })
   }
 }
