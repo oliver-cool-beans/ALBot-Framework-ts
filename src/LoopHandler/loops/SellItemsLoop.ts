@@ -1,6 +1,6 @@
 import Loop from './Loop.js'
 
-export default class BuyPotionLoop extends Loop {
+export default class SellItemsLoop extends Loop {
   async loop (): Promise<void> {
     const { character } = this.bot
     if (character.canSell()) {
