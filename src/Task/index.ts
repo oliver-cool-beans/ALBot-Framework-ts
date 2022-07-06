@@ -39,7 +39,12 @@ export default class Task {
         this.removeFromQueue(true)
       }
     }
-    await this.loop().catch((error) => this.bot.logger.error(`${this.bot.name} failed to run ${this.constructor.name}, loop failed - ${error}`))
+    try {
+      await this.loop()
+    } catch (error) {
+      console.log(error)
+      this.bot.logger.error(`${this.bot.name} failed to run ${this.constructor.name}, loop failed - ${error}`)
+    }
   }
 
   async onStart (): Promise<void> {

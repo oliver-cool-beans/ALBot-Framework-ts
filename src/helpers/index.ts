@@ -1,4 +1,4 @@
-import AL, { BankInfo, IPosition, ItemData, ItemName } from 'alclient'
+import AL, { BankInfo, GMap, IPosition, ItemData, ItemName } from 'alclient'
 import Bot from '../Bot/index.js'
 import monsters from '../monsters/index.js'
 
@@ -55,6 +55,7 @@ export async function findWithdrawBank (bot: Bot, items: Array<ItemData>): Promi
   if (!character.bank || Object.keys(character.bank).length <= 0) {
     while (!character.bank) {
       bot.logger.info(`${bot.name} waiting for bank items to populate`)
+      if (bot.character.map !== 'bank') await bot.easyMove({ map: 'bank', x: 0, y: -200 })
       bot.wait(0.25)
     }
   }
@@ -82,9 +83,9 @@ export async function findWithdrawBank (bot: Bot, items: Array<ItemData>): Promi
   }
 }
 
-export function findClosestVendor (bot: Bot, item: ItemName) {
+export function findClosestVendor (bot: Bot, item: ItemName): {distance: any, npc: any} {
   const { maps: gMaps, npcs: gNpcs } = bot.AL.Game.G
-  return Object.values(gMaps).reduce((npc: any, map: any) => {
+  return Object.values(gMaps as GMap).reduce((npc: any, map: any) => {
     const closestNpcList: Array<any> = Object.values(map.npcs).sort((a: any, b: any) => {
       if (!a.position) {
         return -1

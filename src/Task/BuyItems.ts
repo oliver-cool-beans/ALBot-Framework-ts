@@ -28,7 +28,7 @@ export default class BuyItems extends Task {
       craftQty = this.itemsToBuy[i].q || 1
 
       for (let count = 0; count < craftQty; count++) {
-        await character.buy(this.itemsToBuy[i].name)
+        await character.buy(this.itemsToBuy[i].name).catch(() => {})
       }
     }
 
