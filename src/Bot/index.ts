@@ -5,10 +5,11 @@ import LoopHandler from '../LoopHandler/index.js'
 import loops from '../LoopHandler/loops/index.js'
 import mage from './mage/index.js'
 import merchant from './merchant/index.js'
+import priest from './priest/index.js'
 import { Entity, IPosition, ItemName, MapName, NPCName, ServerIdentifier, ServerRegion } from 'alclient'
 import { attackStrategies, defenceStrategies, moveStrategies } from '../strategies/index.js'
 
-const characterFunctions: any = { mage, merchant }
+const characterFunctions: any = { mage, merchant, priest }
 
 export default class Bot {
   state: 'stopped' | 'running' | 'errored' | 'connecting' | 'disconnecting'
@@ -203,8 +204,8 @@ export default class Bot {
     })
   }
 
-  isLowHp (): Boolean {
-    return (this.character.hp / this.character.max_hp) * 100 <= 30
+  isLowHp (percent = 30): Boolean {
+    return (this.character.hp / this.character.max_hp) * 100 <= percent
   }
 
   setTarget (target: string | null): void {

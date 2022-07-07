@@ -43,13 +43,14 @@ export default class Loop implements loopType {
     this.bot.logger.info(`${this.bot.name} stopped loop ${this.constructor.name}`)
   }
 
-  private getStrategyName (monsterName: string, strategyType): string {
-    return this.bot?.config?.monsters?.strategies?.[monsterName]?.[strategyType]
+  private getStrategyName (monsterName: string, strategyType, ctype: string): string {
+    return this.bot?.config?.monsters?.strategies?.[ctype]?.[monsterName]?.[strategyType] ||
+    this.bot?.config?.monsters?.strategies?.default?.[monsterName]?.[strategyType]
   }
 
   setStrategy (targetData: Entity, strategyType: string): void {
     if (!targetData?.type) return
-    const strategyName = this.getStrategyName(targetData.type, strategyType)
+    const strategyName = this.getStrategyName(targetData.type, strategyType, this.bot.character.ctype)
     if (strategyName) {
       if (this.strategy.name !== strategyName) {
         const StrategyClass = this.bot.strategies[strategyType][strategyName]
