@@ -16,6 +16,7 @@ export type Strategies = {
 }
 
 export type botConfig = {
+  pathFinderOptions: {[key: string]: string}
   itemsToSell: Array<{ name: ItemName, level?: number}>,
   itemsToExchange: Array<{ name: ItemName, level?: number}>,
   itemsToCraft: Array<ItemName>

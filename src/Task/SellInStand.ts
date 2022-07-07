@@ -14,12 +14,12 @@ export default class SellInStand extends Task {
   }
 
   async loop (): Promise<void> {
+    if (this.bot.character.stand) return
     await this.bot.character.closeMerchantStand()
     if (this.bot.character.ctype !== 'merchant') return this.removeFromQueue()
     await this.bot.easyMove(this.standPosition).catch(() => {})
     await this.bot.character.openMerchantStand()
     await this.listItemsForSale()
-    await this.bot.wait(200) // TODO remove this
   }
 
   private async listItemsForSale () {

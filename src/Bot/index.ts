@@ -5,7 +5,7 @@ import LoopHandler from '../LoopHandler/index.js'
 import loops from '../LoopHandler/loops/index.js'
 import mage from './mage/index.js'
 import merchant from './merchant/index.js'
-import { Entity, IPosition, ItemName, MapName, NPCName, ServerIdentifier, ServerRegion, SmartMoveOptions } from 'alclient'
+import { Entity, IPosition, ItemName, MapName, NPCName, ServerIdentifier, ServerRegion } from 'alclient'
 import { attackStrategies, defenceStrategies, moveStrategies } from '../strategies/index.js'
 
 const characterFunctions: any = { mage, merchant }
@@ -31,6 +31,7 @@ export default class Bot {
   target: any
   itemsToHold: Array<ItemName>
   goldToHold: number
+  attackStrategy: Function | undefined
   constructor (params: BotParams) {
     this.state = 'stopped'
     this.config = params.config
@@ -180,8 +181,10 @@ export default class Bot {
     return await new Promise(resolve => setTimeout(resolve, time * 1000))
   }
 
-  async easyMove (to: IPosition | ItemName | MapName | string | NPCName, options: SmartMoveOptions = {}): Promise<IPosition> {
+  async easyMove (to: IPosition | ItemName | MapName | string | NPCName, options: any = {}): Promise<IPosition> {
+    const pathFinderOptions = this.config.pathFinderOptions || {}
     if (this.character.ctype === 'mage') options.useBlink = true
+    options = { ...options, ...pathFinderOptions }
     if (this.character.stand) await this.character.closeMerchantStand()
     return await this.character.smartMove(to, options).catch((error) => {
       this.logger.error(`${this.name} failed easymove - ${error}`)
