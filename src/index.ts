@@ -19,6 +19,8 @@ async function init (): Promise<void> {
     config = JSON.parse(config)
   }
 
+  const { pathFinderOptions = {} } = config
+
   logger.info(AL_EMAIL)
 
   if (!AL_EMAIL || !AL_PASSWORD) return Promise.reject(new Error('AL Credentials not provided'))
@@ -28,7 +30,7 @@ async function init (): Promise<void> {
     return Promise.reject(new Error(`Unable to Login to AL CLient: ${error}`))
   })
 
-  await AL.Pathfinder.prepare(AL.Game.G)
+  await AL.Pathfinder.prepare(AL.Game.G, pathFinderOptions)
 
   const party = new Party([], config, logger)
 

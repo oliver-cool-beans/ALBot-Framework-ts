@@ -183,9 +183,7 @@ export default class Bot {
   }
 
   async easyMove (to: IPosition | ItemName | MapName | string | NPCName, options: any = {}): Promise<IPosition> {
-    const pathFinderOptions = this.config.pathFinderOptions || {}
     if (this.character.ctype === 'mage') options.useBlink = true
-    options = { ...options, ...pathFinderOptions }
     if (this.character.stand) await this.character.closeMerchantStand()
     return await this.character.smartMove(to, options).catch((error) => {
       this.logger.error(`${this.name} failed easymove - ${error}`)
