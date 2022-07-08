@@ -8,7 +8,8 @@ export async function attackOrHeal (bot: Bot, targetData) {
     }
 
     const lowHealthPartyMembers = bot.party.members.filter((member) => {
-      return member.isLowHp(60)
+      return member.isLowHp(60) &&
+      bot.AL.Tools.distance(character, member.character) < character.range
     })
 
     if (lowHealthPartyMembers.length) {
