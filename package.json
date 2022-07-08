@@ -26,6 +26,7 @@
     "discord.js": "^13.8.1",
     "node-fetch": "^3.2.6",
     "node-schedule": "^2.1.0",
+    "toad-scheduler": "^1.6.1",
     "winston": "^3.7.2",
     "winston-console-format": "^1.0.8"
   },

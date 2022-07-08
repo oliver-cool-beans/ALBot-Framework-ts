@@ -1,14 +1,16 @@
 import { ItemData } from 'alclient'
+import { ToadScheduler, SimpleIntervalJob, Task } from 'toad-scheduler'
 import Bot from '..'
 import WithdrawItems from '../../Task/WithdrawItems.js'
 import BankItems from '../../Task/BankItems.js'
 import SellInStand from '../../Task/SellInStand.js'
 import Gather from '../../Task/Gather.js'
-import schedule from 'node-schedule'
 import CombineBankItems from '../../Task/CombineBankItems.js'
 import UpgradeBankItems from '../../Task/UpgradeBankItems.js'
 import FindOrCraft from '../../Task/FindOrCraft.js'
 import FindAndExchange from '../../Task/FindAndExchange.js'
+
+const scheduler = new ToadScheduler()
 
 async function preLoadFunctions (bot: Bot): Promise<void> {
 }
@@ -28,6 +30,7 @@ async function loadFunctions (bot: Bot): Promise<void> {
   const sellInStandArgs = { itemsToSell: items }
   const onStartTasks = [bankItemsTask, withdrawItemsTask]
   const sellInStandTask = new SellInStand(bot, 99, bot.getServerIdentifier(), bot.getServerRegion(), onStartTasks, [], sellInStandArgs)
+
   bot.queue.addTask(sellInStandTask)
   scheduleGatheringTasks(bot)
   scheduleBankTasks(bot)
@@ -36,18 +39,23 @@ async function loadFunctions (bot: Bot): Promise<void> {
 async function loopFunctions (bot: Bot): Promise<void> {
 }
 
+function queueTasks (bot: Bot, tasks: Array<any>, args) {
+  const scheduleTasks = new Task('queueTasks', () => {
+    tasks.forEach((task) => bot.queue.addTask(task))
+  })
+
+  const job = new SimpleIntervalJob(args, scheduleTasks)
+  scheduler.addSimpleIntervalJob(job)
+}
+
 function scheduleBankTasks (bot: Bot): void {
   const bankArgs = { itemsToHold: bot.itemsToHold }
   const bankItemsTask = new BankItems(bot, 0, bot.getServerIdentifier(), bot.getServerRegion(), [], [], bankArgs)
-  const combineTask = new CombineBankItems(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
-  const upgradeTask = new UpgradeBankItems(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
+  const CombineTask = new CombineBankItems(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
+  const UpgradeTask = new UpgradeBankItems(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
   const FindAndExchangeTask = new FindAndExchange(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
-  schedule.scheduleJob('*/16 * * * *', () => bot.queue.addTask(upgradeTask))
-  schedule.scheduleJob('*/17 * * * *', () => bot.queue.addTask(combineTask))
-  schedule.scheduleJob('*/20 * * * *', () => bot.queue.addTask(FindAndExchangeTask))
 
-  bot.queue.addTask(upgradeTask)
-  bot.queue.addTask(combineTask)
+  queueTasks(bot, [CombineTask, UpgradeTask, FindAndExchangeTask], { minutes: 1 })
 }
 
 function scheduleGatheringTasks (bot): void {
@@ -59,10 +67,7 @@ function scheduleGatheringTasks (bot): void {
 
   const FishTask = new Gather(bot, 5, bot.getServerIdentifier(), bot.getServerRegion(), [findOrCraftTask], [], { type: 'fishing' })
   const MineTask = new Gather(bot, 5, bot.getServerIdentifier(), bot.getServerRegion(), [findOrCraftTask], [], { type: 'mining' })
-  bot.queue.addTask(MineTask)
-  bot.queue.addTask(FishTask)
-  schedule.scheduleJob('*/5 * * * *', () => bot.queue.addTask(FishTask))
-  schedule.scheduleJob('*/5 * * * *', () => bot.queue.addTask(MineTask))
+  queueTasks(bot, [MineTask, FishTask], { minutes: 5 })
 }
 
 export default {

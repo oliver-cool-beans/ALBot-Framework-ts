@@ -12,8 +12,6 @@ export default class MainLoop extends Loop {
   }
 
   async loop (): Promise<void> {
-    const queueSize = await this.bot.queue.getPartyQueueSize()
-    console.log(this.bot.name, 'has queue size', queueSize)
     if (this.bot.queue.getQueueSize() || this.bot.queue.getPartyQueueSize()) {
       return await this.bot.queue.runQueueTask()
     }
