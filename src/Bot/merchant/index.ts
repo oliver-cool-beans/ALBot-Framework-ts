@@ -55,7 +55,7 @@ function scheduleBankTasks (bot: Bot): void {
   const UpgradeTask = new UpgradeBankItems(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
   const FindAndExchangeTask = new FindAndExchange(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
 
-  queueTasks(bot, [CombineTask, UpgradeTask, FindAndExchangeTask], { minutes: 1 })
+  queueTasks(bot, [CombineTask, UpgradeTask, FindAndExchangeTask], { minutes: 10 })
 }
 
 function scheduleGatheringTasks (bot): void {
