@@ -66,6 +66,10 @@ export default class Party {
     return this.members.find((member) => member.name === name)
   }
 
+  findMemberById (id: string): Bot | undefined {
+    return this.members.find((member) => member.character.id === id)
+  }
+
   async disconnect () {
     return Promise.all(this.members.map(async (member) => {
       return member.disconnect()
