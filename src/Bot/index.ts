@@ -33,6 +33,7 @@ export default class Bot {
   itemsToHold: Array<ItemName>
   goldToHold: number
   attackStrategy: Function | undefined
+  defenceStrategy: Function | undefined
   constructor (params: BotParams) {
     this.state = 'stopped'
     this.config = params.config
