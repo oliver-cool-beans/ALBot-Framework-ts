@@ -32,6 +32,9 @@ export default class Queue {
   }
 
   getRunningTask (): Task {
+    if (this.queue.length && this.queue[0].constructor.name === 'BankItems') {
+      return this.queue[0]
+    }
     return this.partyQueue[0] || this.queue[0] || null
   }
 
@@ -41,6 +44,9 @@ export default class Queue {
   }
 
   async runQueueTask () : Promise<void> {
+    if (this.queue.length && this.queue[0].constructor.name === 'BankItems') {
+      return await this.queue[0].run()
+    }
     if (this.partyQueue[0]) return await this.partyQueue[0].run()
     if (this.queue[0]) return await this.queue[0].run()
   }

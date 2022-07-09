@@ -18,7 +18,6 @@ export default class BankItems extends Task {
   }
 
   async loop (): Promise<void> {
-    console.log('running bank items!')
     await this.bot.easyMove(this.bankingPosition).catch(() => {})
     await bankItems(this.bot, this.itemsToHold)
     await this.removeFromQueue()
