@@ -55,17 +55,20 @@ class DataPool {
   async refreshAlData () {
     console.log('refreshData running', this.monsters)
     const url = 'https://aldata.earthiverse.ca/monsters/' + this.monsters.join(',')
-    const response = await fetch(url)
-    if (response.status === 200) {
-      this.data.aldata = await response.json() || []
-      this.addPartyTasks()
-    } else {
-      this.data.aldata = []
+    try {
+      const response = await fetch(url)
+      if (response.status === 200) {
+        this.data.aldata = await response.json() || []
+        this.addPartyTasks()
+      } else {
+        this.data.aldata = []
+      }
+    } catch (error) {
+      console.log(`refreshAlData failed with - ${error}`)
     }
   }
 
   async refreshBankData () {
-    console.log('refreshBankDat running')
     const memberWithBank = this.party.allBots.find((bot) => bot.character && bot.character.bank && Object.keys(bot.character.bank).length > 1)
     if (!memberWithBank) return
     this.data.bank = memberWithBank.character.bank
