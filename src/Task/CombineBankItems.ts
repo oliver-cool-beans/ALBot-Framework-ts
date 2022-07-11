@@ -147,7 +147,7 @@ export default class CombineBankItems extends Task {
         await character.buy(requiredScroll)
       }
       scrollPosition = character.locateItem(requiredScroll)
-      if (!scrollPosition) continue
+      if (scrollPosition === undefined) continue
 
       this.bot.logger.info(`${this.bot.name} compounding ${JSON.stringify(itemArray[0])} ${JSON.stringify(itemArray[1])} ${JSON.stringify(itemArray[2])}`)
       await character.compound(itemArray[0], itemArray[1], itemArray[2], scrollPosition)
