@@ -30,7 +30,7 @@ export default class UpgradeBankItems extends Task {
     const countItemsAboveLevel = (item: ItemData): number => {
       const allItems = Object.values(bank).map((slotData) => slotData).flat()
       return allItems.filter((bankItem: ItemData | number | undefined) => {
-        if (typeof bankItem === 'number' || !bankItem || !bankItem.level || !item.level) return null
+        if (typeof bankItem === 'number' || !bankItem || bankItem.level === undefined || item.level === undefined) return null
         return bankItem && bankItem.name === item.name && bankItem.level > item.level
       }).length
     }
@@ -42,6 +42,9 @@ export default class UpgradeBankItems extends Task {
       if (typeof slotItems === 'number') return bankData
 
       bankData[slotName] = slotItems.map((item: ItemData) => {
+        if (item?.name) {
+          console.log('evaluating', item, this.countAllInBank(bank, item), countItemsAboveLevel(item))
+        }
         if (this.countAllInBank(bank, item) > 1 && !countItemsAboveLevel(item) && !findSavedItem(item)) {
           this.savedItems.push(item)
           return null

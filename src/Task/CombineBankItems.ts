@@ -56,7 +56,7 @@ export default class CombineBankItems extends Task {
     const countItemsAboveLevel = (item: ItemData): number => {
       const allItems = Object.values(bank).map((slotData) => slotData).flat()
       return allItems.filter((bankItem: ItemData | undefined | number) => {
-        if (typeof bankItem === 'number' || !bankItem || !bankItem.level || !item.level) return null
+        if (typeof bankItem === 'number' || !bankItem || bankItem.level === undefined || item.level === undefined) return null
         return bankItem && bankItem.name === item.name && bankItem.level > item.level
       }).length
     }
