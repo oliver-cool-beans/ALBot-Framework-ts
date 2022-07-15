@@ -26,6 +26,11 @@ export default class PotionLoop extends Loop {
     const mpot = mpot1Loc !== undefined ? mpot1Loc : mpot0Loc
     const hpot = hpot1Loc !== undefined ? hpot1Loc : hpot0Loc
 
+    if (character.mp === 0) {
+      await this.useMP(mpot)
+      await this.bot.wait(this.timeout)
+    }
+
     if (character.hp < character.max_hp - 500) {
       await this.useHP(hpot)
       await this.bot.wait(this.timeout)
