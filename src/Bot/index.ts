@@ -6,10 +6,11 @@ import loops from '../LoopHandler/loops/index.js'
 import mage from './mage/index.js'
 import merchant from './merchant/index.js'
 import priest from './priest/index.js'
+import rogue from './rogue/index.js'
 import { Entity, IPosition, ItemName, MapName, NPCName, ServerIdentifier, ServerRegion } from 'alclient'
 import { attackStrategies, defenceStrategies, moveStrategies } from '../strategies/index.js'
 
-const characterFunctions: any = { mage, merchant, priest }
+const characterFunctions: any = { mage, merchant, priest, rogue }
 
 export default class Bot {
   state: 'stopped' | 'running' | 'errored' | 'connecting' | 'disconnecting'
