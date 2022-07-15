@@ -17,6 +17,8 @@ export default class PotionLoop extends Loop {
 
   private async usePotionIfLow (): Promise<void> {
     const character = this.bot.character
+    const MPThreshold = character.max_mp < 500 ? character.max_mp : character.max_mp - 500
+    const HPThreshold = character.max_hp < 500 ? character.max_hp : character.max_hp - 500
 
     const mpot0Loc = character.locateItem('mpot0', character.items)
     const mpot1Loc = character.locateItem('mpot1', character.items)
@@ -28,18 +30,18 @@ export default class PotionLoop extends Loop {
 
     if (character.mp === 0) {
       await this.useMP(mpot)
-      await this.bot.wait(this.timeout)
+      return
     }
 
-    if (character.hp < character.max_hp - 500) {
+    if (character.hp < HPThreshold) {
       await this.useHP(hpot)
       await this.bot.wait(this.timeout)
     }
-    if (character.mp < character.max_mp - 500) await this.useMP(mpot)
+    if (character.mp < MPThreshold) await this.useMP(mpot)
   }
 
   private async useHP (hpot?: 'hpot0' | 'hpot1'): Promise<void> {
-    if (hpot === undefined) {
+    if (hpot === undefined || this.bot.character.max_mp < 1000) {
       if (!this.bot.character.canUse('regen_hp')) return
       return await this.bot.character.regenHP()
     }
@@ -51,7 +53,7 @@ export default class PotionLoop extends Loop {
   }
 
   private async useMP (mpot?: 'mpot0' | 'mpot1'): Promise<void> {
-    if (mpot === undefined) {
+    if (mpot === undefined || this.bot.character.max_mp < 1000) {
       if (!this.bot.character.canUse('regen_mp')) return
       return await this.bot.character.regenMP()
     }
