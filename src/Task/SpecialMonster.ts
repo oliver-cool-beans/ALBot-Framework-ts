@@ -14,7 +14,14 @@ export default class SpecialMonster extends Task {
 
   async loop (): Promise<void> {
     const { targetData } = this.args
+    const { noSolo = [] } = this.bot.config.monsters
     if (!targetData) return
+
+    if (noSolo.includes(targetData.id) && !targetData.target) {
+      this.bot.logger.info(`${this.bot.name} removing SpecialMonster for ${targetData.id} - NoSolo and no target`)
+      this.bot.queue.removeTask(this.id)
+      return
+    }
 
     if (this.bot.target !== targetData.id) this.bot.setTarget(null)
 
