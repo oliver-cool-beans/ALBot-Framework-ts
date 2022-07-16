@@ -55,7 +55,7 @@ function scheduleBankTasks (bot: Bot): void {
   const UpgradeTask = new UpgradeBankItems(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
   const FindAndExchangeTask = new FindAndExchange(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
 
-  const findOrCraftItemsArgs = { items: [{ name: 'daggerofthedead', q: 1, level: 0 }] }
+  const findOrCraftItemsArgs = { items: bot.config.itemsToCraft }
   const findOrCraftItemsTask = new FindOrCraft(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], findOrCraftItemsArgs)
 
   queueTasks(bot, [CombineTask, UpgradeTask, FindAndExchangeTask, findOrCraftItemsTask], { minutes: 10 })
