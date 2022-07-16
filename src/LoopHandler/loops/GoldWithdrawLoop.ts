@@ -18,7 +18,7 @@ export default class GoldWithdrawLoop extends Loop {
       itemsToHold: [hpot, mpot, 'tracker']
     }
 
-    if (character.gold >= this.bot.goldToHold) {
+    if (character.gold >= this.bot.goldToHold * 10) {
       const BankItemsTask = new BankItems(this.bot, 0, this.bot.getServerIdentifier(), this.bot.getServerRegion(), [], [], args)
       this.bot.queue.addTask(BankItemsTask)
     }
