@@ -11,13 +11,15 @@ export default class WithdrawItems extends Task {
   constructor (bot: Bot, priority: number, serverIdentifier: ServerIdentifier, serverRegion: ServerRegion, onStartTasks: Array<Task> = [], onRemoveTasks: Array<Task> = [], args: taskArgs = {}) {
     super(bot, priority, serverIdentifier, serverRegion, onStartTasks, onRemoveTasks, args)
     this.bankingPosition = { map: 'bank', x: 0, y: -200 }
-    this.items = args.items
+    this.items = args.items || []
   }
 
   async loop (): Promise<void> {
-    console.log('running withdraw items!')
     await this.bot.easyMove(this.bankingPosition).catch(() => {})
     await findWithdrawBank(this.bot, this.items)
+    if (this.bot.character.gold < this.bot.goldToHold) {
+      await this.bot.character.withdrawGold(this.bot.goldToHold - this.bot.character.gold)
+    }
     await this.removeFromQueue()
   }
 }

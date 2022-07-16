@@ -17,8 +17,8 @@ export default class PotionLoop extends Loop {
 
   private async usePotionIfLow (): Promise<void> {
     const character = this.bot.character
-    const MPThreshold = character.max_mp < 1000 ? character.max_mp : character.max_mp - 500
-    const HPThreshold = character.max_hp < 1000 ? character.max_hp : character.max_hp - 500
+    const MPThreshold = character.max_mp < 1000 ? character.max_mp * 0.8 : character.max_mp - 500
+    const HPThreshold = character.max_hp < 2000 ? character.max_hp * 0.9 : character.max_hp - 500
 
     const mpot0Loc = character.locateItem('mpot0', character.items)
     const mpot1Loc = character.locateItem('mpot1', character.items)

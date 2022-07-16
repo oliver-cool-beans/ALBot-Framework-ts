@@ -55,7 +55,10 @@ function scheduleBankTasks (bot: Bot): void {
   const UpgradeTask = new UpgradeBankItems(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
   const FindAndExchangeTask = new FindAndExchange(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], {})
 
-  queueTasks(bot, [CombineTask, UpgradeTask, FindAndExchangeTask], { minutes: 10 })
+  const findOrCraftItemsArgs = { items: [{ name: 'daggerofthedead', q: 1, level: 0 }] }
+  const findOrCraftItemsTask = new FindOrCraft(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], findOrCraftItemsArgs)
+
+  queueTasks(bot, [CombineTask, UpgradeTask, FindAndExchangeTask, findOrCraftItemsTask], { minutes: 10 })
 }
 
 function scheduleGatheringTasks (bot): void {
@@ -67,6 +70,7 @@ function scheduleGatheringTasks (bot): void {
 
   const FishTask = new Gather(bot, 5, bot.getServerIdentifier(), bot.getServerRegion(), [findOrCraftTask], [], { type: 'fishing' })
   const MineTask = new Gather(bot, 5, bot.getServerIdentifier(), bot.getServerRegion(), [findOrCraftTask], [], { type: 'mining' })
+
   queueTasks(bot, [MineTask, FishTask], { minutes: 5 })
 }
 

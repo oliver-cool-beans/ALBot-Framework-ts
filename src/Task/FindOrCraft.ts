@@ -7,9 +7,11 @@ import { findWithdrawBank, findClosestVendor } from '../helpers/index.js'
 
 export default class FindOrCraft extends Task {
   items: Array<ItemData>
+  noFind: Boolean
   constructor (bot: Bot, priority: number, serverIdentifier: ServerIdentifier, serverRegion: ServerRegion, onStartTasks: Array<Task> = [], onRemoveTasks: Array<Task> = [], args: taskArgs = {}) {
     super(bot, priority, serverIdentifier, serverRegion, onStartTasks, onRemoveTasks, args)
     this.items = args.items || []
+    this.noFind = args.noFind
   }
 
   isInInventory (item: ItemData): Boolean {
@@ -25,9 +27,7 @@ export default class FindOrCraft extends Task {
       item = itemsToBuy[index]
       try {
         await this.bot.easyMove(item.closestVendor, { getWithin: this.bot.AL.Constants.NPC_INTERACTION_DISTANCE / 2 })
-        console.log('Moved to vendor', item.closestVendor, 'for', item.name)
         if (this.bot.character.canBuy(item.name)) {
-          console.log('I AM NOW BUYING', item.name, item.qty)
           await this.bot.character.buy(item.name, item.qty).catch((error) => { console.log('CANNOT BUY', error) })
         }
       } catch (error) {
@@ -51,9 +51,12 @@ export default class FindOrCraft extends Task {
     const bank = character.bank || character.party.dataPool.data.bank
     if (!bank) return await this.bot.easyMove({ map: 'bank', x: 0, y: -200 })
 
-    await findWithdrawBank(this.bot, this.items)
+    let missingItems: Array<ItemData> = this.items
 
-    const missingItems = this.items.filter((item) => !this.isInInventory(item))
+    if (!this.noFind) {
+      await findWithdrawBank(this.bot, this.items)
+      missingItems = this.items.filter((item) => !this.isInInventory(item))
+    }
 
     this.bot.logger.info(`${this.bot.name} is missing these items ${JSON.stringify(missingItems)}`)
 
