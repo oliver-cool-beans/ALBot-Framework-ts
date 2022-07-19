@@ -14,13 +14,12 @@ export default class Party {
     this.dataPool = new DataPool(this)
   }
 
-  private getCorrectServer (member) {
+  private getCorrectServer (member: Bot) {
     if (!member.character?.serverData) return {}
     const runningTask = member.queue.getRunningTask() || {}
-    const { name: memberServerIdentifier, region: memberServerRegion } = member.character.serverData
     return {
-      serverRegion: runningTask.serverRegion || memberServerRegion,
-      serverIdentifier: runningTask.serverIdentifier || memberServerIdentifier
+      serverRegion: runningTask.serverRegion || member.defaultRegionName,
+      serverIdentifier: runningTask.serverIdentifier || member.defaultRegionIdentifier
     }
   }
 
