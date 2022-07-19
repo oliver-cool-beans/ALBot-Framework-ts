@@ -21,4 +21,10 @@ export async function support (bot: Bot, targetData) {
   if (lowHealthPartyMembers.length > 1 && character.canUse('partyheal')) {
     return character.partyHeal()
   }
+
+  const attackingMe = bot.attackingMe()
+
+  if (!attackingMe.length && character.hp < character.max_hp) {
+    return bot.character.heal(character.id)
+  }
 }
