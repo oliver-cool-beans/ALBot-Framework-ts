@@ -30,7 +30,7 @@ export default class Bot {
   monster: string
   elixirs: Array<string>
   strategies: Strategies
-  target: any
+  target: string | null
   itemsToHold: Array<ItemName>
   goldToHold: number
   attackStrategy: Function | undefined
@@ -54,6 +54,7 @@ export default class Bot {
     this.strategies = { move: moveStrategies, attack: attackStrategies, defence: defenceStrategies }
     this.itemsToHold = []
     this.goldToHold = 1000000
+    this.target = null
   }
 
   private async logInBot (region: string, identifier: string): Promise<any> {
