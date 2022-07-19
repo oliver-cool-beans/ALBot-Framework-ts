@@ -16,7 +16,7 @@ export default class Task {
   constructor (bot: Bot, priority: number | undefined, serverIdentifier: ServerIdentifier, serverRegion: ServerRegion, onStartTasks: Array<Task> = [], onRemoveTasks: Array<Task> = [], args: taskArgs = {}) {
     this.serverIdentifier = serverIdentifier
     this.serverRegion = serverRegion
-    this.id = this.createId(`${this.constructor.name}${this.serverRegion}${this.serverIdentifier}`)
+    this.id = this.createId(`${this.constructor.name}${this.serverRegion}${this.serverIdentifier}${JSON.stringify(args).substring(0, 16)}`)
     this.onStartTasks = onStartTasks
     this.onRemoveTasks = onRemoveTasks
     this.bot = bot

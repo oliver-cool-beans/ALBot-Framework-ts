@@ -33,8 +33,7 @@ export default class FinishMonsterHunt extends Task {
     if (!character.canUse(this.type, { ignoreEquipped: true })) return this.removeFromQueue()
     if (!character.hasItem(tool) && !character.isEquipped(tool)) return this.removeFromQueue()
 
-    await character.closeMerchantStand()
-    await character.smartMove(this.positions[this.type]).catch(() => {})
+    await this.bot.easyMove(this.positions[this.type]).catch(() => {})
 
     const offhand = character.slots.offhand?.name
 
@@ -44,8 +43,7 @@ export default class FinishMonsterHunt extends Task {
       await character.equip(mainHandSlot)
     }
 
-    console.log('we are going to', functionName)
-    while (character.canUse(this.type)) {
+    while (character.canUse(this.type) && !character.smartMoving) {
       await character[functionName]().catch((error) => {
         this.bot.logger.error(`${this.bot.name} failed to ${functionName} - ${error}`)
       })

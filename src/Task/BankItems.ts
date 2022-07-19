@@ -20,7 +20,7 @@ export default class BankItems extends Task {
   async loop (): Promise<void> {
     await this.bot.easyMove(this.bankingPosition).catch(() => {})
     await bankItems(this.bot, this.itemsToHold)
-    if (this.bot.character.gold >= this.bot.goldToHold) {
+    if (this.bot.character.gold >= this.bot.goldToHold && (this.bot.character.gold - this.bot.goldToHold)) {
       await this.bot.character.depositGold(this.bot.character.gold - this.bot.goldToHold)
     }
     await this.removeFromQueue()

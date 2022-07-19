@@ -17,8 +17,8 @@ export default class SpecialMonster extends Task {
     const { noSolo = [] } = this.bot.config.monsters
     if (!targetData) return
 
-    if (noSolo.includes(targetData.id) && !targetData.target) {
-      this.bot.logger.info(`${this.bot.name} removing SpecialMonster for ${targetData.id} - NoSolo and no target`)
+    if ((noSolo.includes(targetData.id) || noSolo.includes(targetData.type)) && !targetData.target) {
+      this.bot.logger.info(`${this.bot.name} removing SpecialMonster for ${targetData.type} - NoSolo and no target`)
       this.bot.queue.removeTask(this.id)
       return
     }
