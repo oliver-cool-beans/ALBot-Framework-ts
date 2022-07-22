@@ -31,6 +31,7 @@ export default class DefaultMonsterHandler {
       willBurnToDeath: false,
       willDieToProjectiles: false
     }).filter((target) => !this.bot.party.findMemberWithTarget(target.id))
+      .filter((target) => ![...this.bot.character.players].find(([name, player]) => player.target === target.id))
     targets = targets.sort(sortClosestDistance(this.bot.character))
     return targets[0]
   }

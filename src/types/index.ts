@@ -1,4 +1,4 @@
-import { Entity, IPosition, ItemName, ServerIdentifier, ServerRegion } from 'alclient'
+import { Entity, IPosition, ItemData, ItemName, ServerIdentifier, ServerRegion } from 'alclient'
 import Party from '../Party'
 
 export interface loop {
@@ -21,6 +21,7 @@ export type botConfig = {
   itemsToExchange: Array<{ name: ItemName, level?: number}>,
   itemsToCraft: Array<ItemName>
   itemsToRecycle: Array<ItemName>
+  itemLimits: Array<ItemData>
   monsters: {
     noSolo: Array<string>,
     special: Array<string>,

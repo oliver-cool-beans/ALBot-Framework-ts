@@ -1,3 +1,4 @@
+import { Entity } from 'alclient'
 import Bot from '../../Bot/index.js'
 import Loop from './Loop.js'
 
@@ -5,6 +6,11 @@ export default class AttackLoop extends Loop {
   constructor (bot: Bot) {
     super(bot)
     this.timeout = 0.05
+  }
+
+  canAttack (entity: Entity): Boolean {
+    return this.bot.character.canUse('attack') &&
+    this.bot.AL.Tools.distance(this.bot.character, entity) <= this.bot.character.range && this.bot.character.entities.get(entity.id)
   }
 
   async loop (): Promise<void> {
@@ -32,7 +38,7 @@ export default class AttackLoop extends Loop {
       })
     }
 
-    if (this.bot.character.canUse('attack')) {
+    if (this.canAttack(targetData)) {
       await this.bot.character.basicAttack(targetData?.id).catch((error) => {
         this.bot.logger.error(`${this.bot.name} failed to attack - ${error}`)
       })
