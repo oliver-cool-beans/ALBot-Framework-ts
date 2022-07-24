@@ -20,7 +20,7 @@ export default class KiteTarget extends Strategy {
       character.stopSmartMove().catch(() => {})
     }
 
-    const kiteDistance = Math.min(character.range)
+    const kiteDistance = Math.min(character.range * 0.9)
     const distanceToMove = distance - kiteDistance
     const angleFromBotToMonster = Math.atan2(target.y - character.y, target.x - character.x)
 

@@ -1,17 +1,21 @@
 import { Entity } from 'alclient'
 import Bot from '../Bot/index.js'
 import DataPool from './DataPool.js'
+import Companion from 'al-companion-sdk'
 
 export default class Party {
   members: Array<Bot>
   allBots: Array<Bot>
   config: any
   dataPool: DataPool
+  companion: Companion
   constructor (characters = [], config = {}, logger) {
     this.members = []
     this.allBots = characters
     this.config = config
     this.dataPool = new DataPool(this)
+    this.companion = new Companion(process.env.COMPANION_USERNAME, process.env.COMPANION_PASSWORD)
+    this.companion.login()
   }
 
   private getCorrectServer (member: Bot) {
@@ -33,6 +37,19 @@ export default class Party {
 
     if (serverRegion === currentServerRegion && serverIdentifier === currentServerIdentifier) return true
     return false
+  }
+
+  async companionLoop (): Promise<void> {
+    while (true) {
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      await Promise.all(this.members.map(async (member) => {
+        if (!member.character?.name) return
+        const payload = this.companion.formatCharacterPayload(member.character)
+        await this.companion.updateCharacter(payload).catch(() => {
+          member.logger(`${member.name} failed to upload to companion`)
+        })
+      }))
+    }
   }
 
   async reconnectMemberLoop (): Promise<boolean> {
@@ -78,6 +95,7 @@ export default class Party {
   async start (AL): Promise<void> {
     this.dataPool.start()
     this.reconnectMemberLoop()
+    this.companionLoop()
     await Promise.all(this.members.map(async (member, index: number) => {
       member.start(AL).then(() => member.run(this, null))
     }))
