@@ -45,7 +45,7 @@ export async function withdrawBank (bot, bank: BankInfo) {
       if (!bank[slotName][i]) continue
       bot.logger.info(`${bot.name} withdrawing ${bank[slotName][i].name} from slot ${slotName} index ${i}`)
       await character.withdrawItem(slotName, i, character.getFirstEmptyInventorySlot()).catch((error) => {
-        bot.logger.error(`${bot.name} cannot withdraw ${slotName[i].name} - ${error}`)
+        bot.logger.error(`${bot.name} cannot withdraw ${bank[slotName][i].name} - ${error}`)
       })
       await bot.wait(0.25)
     }
