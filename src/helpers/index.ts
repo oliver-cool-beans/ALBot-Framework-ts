@@ -34,7 +34,7 @@ export async function bankItems (bot: Bot, itemsToHold: Array<ItemName>): Promis
     } catch (e) {
       bot.logger.error(e)
     }
-    await bot.wait(1)
+    await bot.wait(2)
   }
 }
 
@@ -44,7 +44,9 @@ export async function withdrawBank (bot, bank: BankInfo) {
     for (const i in bank[slotName]) {
       if (!bank[slotName][i]) continue
       bot.logger.info(`${bot.name} withdrawing ${bank[slotName][i].name} from slot ${slotName} index ${i}`)
-      await character.withdrawItem(slotName, i, character.getFirstEmptyInventorySlot())
+      await character.withdrawItem(slotName, i, character.getFirstEmptyInventorySlot()).catch((error) => {
+        bot.logger.error(`${bot.name} cannot withdraw ${slotName[i].name} - ${error}`)
+      })
       await bot.wait(0.25)
     }
   }
@@ -106,4 +108,9 @@ export function findClosestVendor (bot: Bot, item: ItemName): {distance: any, np
     }
     return npc
   }, { distance: null, npc: {} })
+}
+
+export function findTank (bot: Bot): Bot | undefined {
+  return bot.party.members.find((member) => member && member.character.ctype === 'warrior') ||
+  bot.party.members.find((member) => member && member.character.ctype === 'priest')
 }

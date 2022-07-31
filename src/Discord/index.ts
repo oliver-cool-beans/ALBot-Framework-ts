@@ -40,7 +40,7 @@ export class Discord {
     this.client.on('interactionCreate', async interaction => {
       if (!interaction.isCommand()) return
       if (!this.commands[interaction.commandName]) return
-      await interaction.deferReply({ ephemeral: true })
+      await interaction.deferReply()
       return this.commands[interaction.commandName].interact(interaction, this.characters, this.AL)
     })
   }
