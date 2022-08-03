@@ -94,7 +94,7 @@ export function findClosestVendor (bot: Bot, item: ItemName): {distance: any, np
       }
       const compareA = { map: map.name, x: a.position[0], y: a.position[1] }
       const compareB = { map: map.name, x: b.position[0], y: b.position[1] }
-      return AL.Tools.distance(bot.character.character, compareA) - AL.Tools.distance(bot.character.character, compareB)
+      return AL.Tools.distance({ x: bot.character.x, y: bot.character.y, map: bot.character.map }, compareA) - AL.Tools.distance({ x: bot.character.x, y: bot.character.y, map: bot.character.map }, compareB)
     }).filter((npc: any) => gNpcs[npc.id].items && gNpcs[npc.id].items.includes(item)) // Filter only npc's with the item we want
 
     if (!closestNpcList.length) return npc
@@ -113,4 +113,12 @@ export function findClosestVendor (bot: Bot, item: ItemName): {distance: any, np
 export function findTank (bot: Bot): Bot | undefined {
   return bot.party.members.find((member) => member && member.character.ctype === 'warrior') ||
   bot.party.members.find((member) => member && member.character.ctype === 'priest')
+}
+
+export function allPartyPresent (bot: Bot): Boolean {
+  if (!bot.party) return false
+  return bot.party.members.every((member) => {
+    if (member.character.ctype === 'merchant') return true
+    return AL.Tools.distance({ x: bot.character.x, y: bot.character.y, map: bot.character.map }, { x: member.character.x, y: member.character.y, map: member.character.map }) <= 250
+  })
 }

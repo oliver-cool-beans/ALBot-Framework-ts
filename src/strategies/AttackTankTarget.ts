@@ -25,7 +25,10 @@ export default class AttackTankTarget extends Strategy {
     if (!target) return
 
     if (target.target === this.tank.character.id) {
-      await character.basicAttack(target.id)
+      await character.basicAttack(target.id).catch(() => {})
+    }
+    if (this.tank.name === this.bot.name) {
+      await character.basicAttack(target.id).catch(() => {})
     }
   }
 }

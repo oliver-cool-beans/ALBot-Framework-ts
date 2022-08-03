@@ -1,7 +1,15 @@
-import { Entity } from 'alclient'
+import { Entity, ServerIdentifier, ServerRegion } from 'alclient'
 import Task from './index.js'
+import monsters from '../monsters/index.js'
+import Bot from '../Bot/index.js'
+import { taskArgs } from '../types/index.js'
 
 export default class SpecialMonster extends Task {
+  monsterHandler: any
+  constructor (bot: Bot, priority: number | undefined, serverIdentifier: ServerIdentifier, serverRegion: ServerRegion, onStartTasks: Array<Task> = [], onRemoveTasks: Array<Task> = [], args: taskArgs = {}) {
+    super(bot, priority, serverIdentifier, serverRegion, onStartTasks, onRemoveTasks, args)
+  }
+
   findTarget (target: Entity): Entity {
     const targets = this.bot.character.getEntities({ canDamage: true, couldGiveCredit: true, typeList: [target.type], willBurnToDeath: false, willDieToProjectiles: false })
     return targets[0]
@@ -21,6 +29,13 @@ export default class SpecialMonster extends Task {
       this.bot.logger.info(`${this.bot.name} removing SpecialMonster for ${targetData.type} - NoSolo and no target`)
       this.bot.queue.removeTask(this.id)
       return
+    }
+
+    if (monsters[targetData.type]) {
+      if (!this.monsterHandler) {
+        this.monsterHandler = new monsters[targetData.type](this.bot, this.id)
+      }
+      return await this.monsterHandler.loop(targetData)
     }
 
     if (this.bot.target !== targetData.id) this.bot.setTarget(null)

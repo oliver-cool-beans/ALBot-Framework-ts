@@ -40,7 +40,7 @@ async function init (): Promise<void> {
       defaultRegionName: 'ASIA',
       defaultRegionIdentifier: 'I',
       characterClass: char.type,
-      monster: DEFAULT_MONSTER || 'bee',
+      monster: DEFAULT_MONSTER || 'fireroamer',
       logger,
       config: config || {},
       party
