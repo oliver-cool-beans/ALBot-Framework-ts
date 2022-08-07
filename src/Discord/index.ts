@@ -27,15 +27,19 @@ export class Discord {
       character: { commands: characterCommands(), interact: characterInteract }
     }
 
-    this.createCommands()
-    this.startListener()
+    try {
+      this.createCommands()
+      this.startListener()
+    } catch (error) {
+      console.log('Failed to connect to discord!', error)
+    }
     this.client.login(credentials.token)
   }
 
   startListener (): void {
-    console.log('starting client')
+    console.log('Starting discord client')
     this.client.on('ready', () => {
-      console.log(`Logged in as ${this.client.user.tag}!`)
+      console.log(`Discord Logged in as ${this.client.user.tag}!`)
     })
     this.client.on('interactionCreate', async interaction => {
       if (!interaction.isCommand()) return
