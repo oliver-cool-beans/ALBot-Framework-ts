@@ -54,6 +54,7 @@ export default class Loop implements loopType {
     if (strategyName) {
       if (this.strategy.name !== strategyName) {
         const StrategyClass = this.bot.strategies[strategyType][strategyName]
+        if (!StrategyClass) return
         const MoveStrategy = new StrategyClass(this.bot, targetData)
         this.strategy = { name: strategyName, func: MoveStrategy }
       }
