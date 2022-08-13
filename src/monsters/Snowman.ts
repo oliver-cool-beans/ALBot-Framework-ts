@@ -8,7 +8,7 @@ export default class Snowman {
   rallyPosition: IPosition
   constructor (bot: Bot) {
     this.bot = bot
-    this.rallyPosition = { x: 881, y: 601, map: 'winterland' }
+    this.rallyPosition = { x: 1143.0969205025276, y: -1043.9478443762375, map: 'winterland' }
   }
 
   checkTarget (target: Entity): boolean {
