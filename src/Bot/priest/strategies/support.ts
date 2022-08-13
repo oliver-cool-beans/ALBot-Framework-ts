@@ -9,6 +9,15 @@ export async function support (bot: Bot, targetData) {
     }
   }
 
+  const attackingParty = [...character.entities.values()].filter((entity) => {
+    return entity.target && bot.party.findMemberById(entity.target) && entity.target !== bot.character.id
+  })
+
+  if (attackingParty.length && character.canUse('absorb')) {
+    console.log('absorbing!!')
+    await character.absorbSins(attackingParty[0].target)
+  }
+
   const lowHealthPartyMembers = bot.party.members.filter((member) => {
     return member.isLowHp(60) &&
     member.character.map === character.map
@@ -24,7 +33,7 @@ export async function support (bot: Bot, targetData) {
 
   const attackingMe = bot.attackingMe()
 
-  if (!attackingMe.length && character.hp < character.max_hp) {
+  if (!attackingMe.length && character.hp < character.max_hp && character.canUse('heal')) {
     return bot.character.heal(character.id)
   }
 }

@@ -115,3 +115,11 @@ export function findTank (bot: Bot): Bot | undefined {
   return bot.party.members.find((member) => member && member.character.ctype === 'warrior') ||
   bot.party.members.find((member) => member && member.character.ctype === 'priest')
 }
+
+export function allPartyPresent (bot: Bot): Boolean {
+  if (!bot.party) return false
+  return bot.party.members.every((member) => {
+    if (member.character.ctype === 'merchant') return true
+    return AL.Tools.distance({ x: bot.character.x, y: bot.character.y, map: bot.character.map }, { x: member.character.x, y: member.character.y, map: member.character.map }) <= 250
+  })
+}
