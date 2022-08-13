@@ -35,7 +35,7 @@ export default class SpecialMonster extends Task {
       if (!this.monsterHandler) {
         this.monsterHandler = new monsters[targetData.type](this.bot, this.id)
       }
-      return await this.monsterHandler.loop(targetData)
+      return await this.monsterHandler.loop(targetData, this.id)
     }
 
     if (this.bot.target !== targetData.id) this.bot.setTarget(null)
