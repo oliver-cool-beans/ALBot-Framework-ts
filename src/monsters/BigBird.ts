@@ -12,7 +12,7 @@ export class BigBird extends DefaultMonsterHandler {
     super(bot, mtypes)
     this.bot = bot
     this.mtypes = mtypes || [bot.monster]
-    this.rallyPosition = { map: 'main', x: 939, y: 641 }
+    this.rallyPosition = { map: 'main', x: 1325.6127181849818, y: 377.569337335335 }
   }
 
   async loop (): Promise<void> {
@@ -22,7 +22,7 @@ export class BigBird extends DefaultMonsterHandler {
       if (tank && tankTarget?.type === 'bigbird') {
         this.bot.setTarget(tankTarget.id)
         if (this.bot.AL.Tools.distance(this.bot.character, tank.character) >= 40) {
-          await this.bot.easyMove({ x: tank?.character.x, y: tank?.character.y, map: tank?.character.map }, { getWithing: 10 })
+          await this.bot.easyMove({ x: tank?.character.x, y: tank?.character.y, map: tank?.character.map }, { getWithin: 10 })
         }
       } else {
         const spiderTarget = this.findTarget(['spider'])
@@ -38,7 +38,7 @@ export class BigBird extends DefaultMonsterHandler {
       target = this.findTarget()
     }
 
-    if (!target) {
+    if (!target || this.bot.AL.Tools.distance(this.bot.character, this.rallyPosition) >= 100) {
       await this.bot.easyMove(this.rallyPosition)
       return
     }

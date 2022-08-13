@@ -1,15 +1,17 @@
 import Bot from '../Bot/index.js'
 // eslint-disable-next-line no-unused-vars
 import { Entity, MonsterName } from 'alclient'
-import { sortClosestDistance } from '../helpers/index.js'
+import { findTank, sortClosestDistance } from '../helpers/index.js'
 
 export default class Crabxx {
   bot: Bot
   startTime: Date
+  tank: Bot | undefined
   constructor (bot: Bot) {
     this.bot = bot
     this.startTime = new Date()
-    bot.kitePositions.crabxx = { x: 533, y: 334 }
+    this.tank = findTank(bot)
+    bot.kitePositions.crabxx = { x: -948.7080262263672, y: 1618.109145505532 }
   }
 
   checkTarget (target: Entity): boolean {
@@ -47,17 +49,18 @@ export default class Crabxx {
     }
 
     let target = this.bot.character.entities.get(this.bot.target)
+    target && console.log(target.s)
     if (target?.target && (target.type !== 'crabxx' || target.type !== 'crabx')) {
       this.bot.setTarget(null)
     }
 
     if (!target || !this.checkTarget(target)) {
       this.bot.setTarget(null)
-      target = this.findTarget('crabx') || this.findTarget('crabxx')
+      target = this.findTarget('crabxx') || this.findTarget('crabxx')
     }
 
     if (this.bot.character.range <= 50 && !this.bot.target) {
-      const crabxx = this.findTarget('crabx')
+      const crabxx = this.findTarget('crabxx')
       if (crabxx?.target) target = crabxx
     }
 
@@ -68,6 +71,18 @@ export default class Crabxx {
 
     if (target && !this.bot.target) {
       this.bot.setTarget(target.id)
+    }
+
+    if (target && target.type === 'crabxx' && this.bot.character.canUse('curse') && !target.s?.cursed) {
+      await this.bot.character.curse(target.id).catch((error) => {
+        console.log('error curse', error)
+      })
+    }
+
+    if (this.bot.character.canUse('scare')) {
+      await this.bot.character.scare().catch((error) => {
+        console.log('failed to scare', error)
+      })
     }
   }
 }

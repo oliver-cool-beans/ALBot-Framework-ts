@@ -9,6 +9,7 @@ export default class Snowman {
   constructor (bot: Bot) {
     this.bot = bot
     this.rallyPosition = { x: 1143.0969205025276, y: -1043.9478443762375, map: 'winterland' }
+    this.bot.kitePositions.snowman = { x: 1164.1348111178727, y: -1074.3045132208767 }
   }
 
   checkTarget (target: Entity): boolean {

@@ -1,15 +1,7 @@
 import { Entity } from 'alclient'
-import Bot from '../Bot/index.js'
 import Strategy from './Strategy.js'
-import { findTank } from '../helpers/index.js'
 
 export default class KiteInCircle extends Strategy {
-  tank: Bot | undefined
-  constructor (bot: Bot) {
-    super(bot)
-    this.tank = findTank(this.bot)
-  }
-
   async loop (targetData: Entity) {
     try {
       const target = this.bot.character.getTargetEntity()
@@ -19,7 +11,7 @@ export default class KiteInCircle extends Strategy {
 
       // Stop smart moving when we can walk to the monster directly
       if (distance > this.bot.character.range) {
-        this.bot.character.easyMove(target).catch(() => {})
+        this.bot.easyMove(target).catch(() => {})
         return
       }
 
