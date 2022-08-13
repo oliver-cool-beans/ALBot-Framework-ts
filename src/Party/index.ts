@@ -1,4 +1,4 @@
-import { Entity } from 'alclient'
+import { Entity, MapName } from 'alclient'
 import Bot from '../Bot/index.js'
 import DataPool from './DataPool.js'
 import Companion from 'al-companion-sdk'
@@ -91,6 +91,10 @@ export default class Party {
 
   findMemberById (id: string): Bot | undefined {
     return this.members.find((member) => member.character.id === id)
+  }
+
+  partyInSameMap (map: MapName): Boolean {
+    return this.members.every((member) => member.character.ctype === 'merchant' || member.character.map === map)
   }
 
   async disconnect () {

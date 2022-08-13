@@ -23,11 +23,11 @@ export default class DefaultMonsterHandler {
     return true
   }
 
-  findTarget (): Entity {
+  findTarget (types?: Array<string>): Entity {
     let targets = this.bot.character.getEntities({
       canDamage: true,
       couldGiveCredit: true,
-      typeList: this.mtypes,
+      typeList: types || this.mtypes,
       willBurnToDeath: false,
       willDieToProjectiles: false
     }).filter((target) => !this.bot.party.findMemberWithTarget(target.id))

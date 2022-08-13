@@ -24,4 +24,5 @@ export async function attackOrHeal (bot: Bot, targetData) {
       bot.logger.error(`${bot.name} failed to attack - ${error}`)
     })
   }
+  await bot.wait(0.5)
 }
