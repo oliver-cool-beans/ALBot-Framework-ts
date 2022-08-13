@@ -5,8 +5,11 @@ import { sortClosestDistance } from '../helpers/index.js'
 
 export default class Crabxx {
   bot: Bot
+  startTime: Date
   constructor (bot: Bot) {
     this.bot = bot
+    this.startTime = new Date()
+    bot.kitePositions.crabxx = { x: 533, y: 334 }
   }
 
   checkTarget (target: Entity): boolean {
@@ -30,8 +33,12 @@ export default class Crabxx {
     return targets[0]
   }
 
-  async loop (targetData: Entity, taskId: string): Promise<void> {
-    if (!this.bot.character?.S?.crabxx?.live) {
+  async loop (targetData: Entity, taskId: string, task): Promise<void> {
+    const now = new Date()
+    const timeoutDiff = now.getTime() - this.startTime.getTime()
+    const timeoutInMins = Math.round(timeoutDiff / 60000)
+    console.log('Timeout in mins', timeoutInMins)
+    if (timeoutInMins >= 35 || (this.bot.isOnServer(task.serverIdentifier, task.serverRegion) && !this.bot.character?.S?.crabxx?.live)) {
       console.log('Crabxx is no longer live, removing task')
       this.bot.party.members.forEach((member) => {
         return member.queue.removeTask(taskId)
@@ -47,6 +54,11 @@ export default class Crabxx {
     if (!target || !this.checkTarget(target)) {
       this.bot.setTarget(null)
       target = this.findTarget('crabx') || this.findTarget('crabxx')
+    }
+
+    if (this.bot.character.range <= 50 && !this.bot.target) {
+      const crabxx = this.findTarget('crabx')
+      if (crabxx?.target) target = crabxx
     }
 
     if (!target) {

@@ -29,8 +29,8 @@ export default class IceGolem {
     return targets[0]
   }
 
-  async loop (targetData: Entity, taskId: string): Promise<void> {
-    if (!this.bot.character?.S?.icegolem?.live) {
+  async loop (targetData: Entity, taskId: string, task): Promise<void> {
+    if (this.bot.isOnServer(task.serverIdentifier, task.serverRegion) && !this.bot.character?.S?.icegolem?.live) {
       console.log('Icegolem is no longer live, removing task')
       this.bot.party.members.forEach((member) => {
         return member.queue.removeTask(taskId)

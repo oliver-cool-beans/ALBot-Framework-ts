@@ -31,8 +31,8 @@ export default class Franky {
     return targets[0]
   }
 
-  async loop (targetData: Entity, taskId: string): Promise<void> {
-    if (!this.bot.character?.S?.franky?.live) {
+  async loop (targetData: Entity, taskId: string, task): Promise<void> {
+    if (this.bot.isOnServer(task.serverIdentifier, task.serverRegion) && !this.bot.character?.S?.franky?.live) {
       console.log('Franky is no longer live, removing task')
       this.bot.party.members.forEach((member) => {
         return member.queue.removeTask(taskId)

@@ -35,6 +35,7 @@ export default class Bot {
   goldToHold: number
   attackStrategy: Function | undefined
   defenceStrategy: Function | undefined
+  kitePositions: { [key: string]: any }
   constructor (params: BotParams) {
     this.state = 'stopped'
     this.config = params.config
@@ -55,6 +56,7 @@ export default class Bot {
     this.itemsToHold = []
     this.goldToHold = 1000000
     this.target = null
+    this.kitePositions = {}
   }
 
   private async logInBot (region: string, identifier: string): Promise<any> {
@@ -104,6 +106,10 @@ export default class Bot {
       this.character.acceptMagiport(data.name).catch(() => {})
     })
     return true
+  }
+
+  isOnServer (identifier: ServerIdentifier, region: ServerRegion): boolean {
+    return this.getServerIdentifier() === identifier && this.getServerRegion() === region
   }
 
   async start (AL: any, region: string = this.defaultRegionName, identifier: string = this.defaultRegionIdentifier) {
