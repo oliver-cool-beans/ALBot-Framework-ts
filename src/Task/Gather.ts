@@ -3,7 +3,7 @@ import Bot from '../Bot/index.js'
 import Task from './index.js'
 import { taskArgs } from '../types/index.js'
 
-export default class FinishMonsterHunt extends Task {
+export default class Gather extends Task {
   positions: {fishing: IPosition, mining: IPosition}
   type: 'fishing' | 'mining'
   constructor (bot: Bot, priority: number, serverIdentifier: ServerIdentifier, serverRegion: ServerRegion, onStartTasks: Array<Task> = [], onRemoveTasks: Array<Task> = [], args: taskArgs = {}) {

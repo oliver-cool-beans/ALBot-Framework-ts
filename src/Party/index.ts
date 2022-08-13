@@ -45,8 +45,15 @@ export default class Party {
       await Promise.all(this.members.map(async (member) => {
         if (!member.character?.name) return
         const payload = this.companion.formatCharacterPayload(member.character)
-        await this.companion.updateCharacter(payload).catch(() => {
-          member.logger(`${member.name} failed to upload to companion`)
+        const tasks = member.queue.getQueue()
+        const runningtask = member.queue.getRunningTask()
+        payload.custom_fields = {
+          taskCount: member.queue.getQueueSize(),
+          runningTask: runningtask?.constructor.name || null,
+          tasks: tasks.map((task) => task.constructor.name) || []
+        }
+        await this.companion.updateCharacter(payload).catch((error) => {
+          member.logger.error(`${member.name} failed to upload to companion - ${error}`)
         })
       }))
     }

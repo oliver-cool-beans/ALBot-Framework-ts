@@ -87,6 +87,7 @@ export async function findWithdrawBank (bot: Bot, items: Array<ItemData>): Promi
 
 export function findClosestVendor (bot: Bot, item: ItemName): {distance: any, npc: any} {
   const { maps: gMaps, npcs: gNpcs } = bot.AL.Game.G
+  const { x, y, map: charMap } = bot.character
   return Object.values(gMaps as GMap).reduce((npc: any, map: any) => {
     const closestNpcList: Array<any> = Object.values(map.npcs).sort((a: any, b: any) => {
       if (!a.position) {
@@ -94,12 +95,12 @@ export function findClosestVendor (bot: Bot, item: ItemName): {distance: any, np
       }
       const compareA = { map: map.name, x: a.position[0], y: a.position[1] }
       const compareB = { map: map.name, x: b.position[0], y: b.position[1] }
-      return AL.Tools.distance({ x: bot.character.x, y: bot.character.y, map: bot.character.map }, compareA) - AL.Tools.distance({ x: bot.character.x, y: bot.character.y, map: bot.character.map }, compareB)
+      return AL.Tools.distance({ x, y, map: charMap }, compareA) - AL.Tools.distance({ x, y, map: charMap }, compareB)
     }).filter((npc: any) => gNpcs[npc.id].items && gNpcs[npc.id].items.includes(item)) // Filter only npc's with the item we want
 
     if (!closestNpcList.length) return npc
 
-    const closestDistance = AL.Tools.distance(bot.character.character, { map: map.name, x: closestNpcList[0].position[0], y: closestNpcList[0].position[1] })
+    const closestDistance = AL.Tools.distance({ x, y, map: charMap }, { map: map.name, x: closestNpcList[0].position[0], y: closestNpcList[0].position[1] })
     if (!npc.distance || closestDistance < npc.distance) {
       npc = {
         npc: closestNpcList[0],
