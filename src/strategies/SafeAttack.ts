@@ -19,7 +19,7 @@ export default class SafeAttack extends Strategy {
 
     // Otherwise, make sure we're out of range of the target
 
-    if (this.bot.AL.Tools.distance(character, target) > target.range) {
+    if (this.bot.AL.Tools.distance(character, target) >= this.bot.character.range * 0.8) {
       await character.basicAttack(target?.id)
     }
   }
