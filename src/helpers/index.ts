@@ -1,6 +1,11 @@
-import AL, { BankInfo, GMap, IPosition, ItemData, ItemName } from 'alclient'
+import AL, { BankInfo, GMap, IPosition, ItemData, ItemName, ServerIdentifier, ServerRegion } from 'alclient'
 import Bot from '../Bot/index.js'
 import monsters from '../monsters/index.js'
+
+export function SNtoServerData (serverName: string): {serverIdentifier: ServerIdentifier, serverRegion: ServerRegion} {
+  const serverData = serverName.split(' ')
+  return { serverIdentifier: serverData[1] as ServerIdentifier, serverRegion: serverData[0] as ServerRegion }
+}
 
 export function calculatePotionItems (characterLevel: number): {hpot: string, mpot: string} {
   const level = characterLevel < 30 ? 0 : 1

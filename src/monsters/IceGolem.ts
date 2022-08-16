@@ -49,7 +49,7 @@ export default class IceGolem {
     }
 
     if (!target) {
-      await this.bot.easyMove('icegolem').catch(() => {})
+      this.bot.character.socket.emit('join', { name: 'icegolem' })
       return
     }
 

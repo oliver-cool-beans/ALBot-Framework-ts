@@ -51,6 +51,9 @@ export default class Franky {
     }
 
     if (!target) {
+      if (this.bot.character.map !== 'level2w') {
+        this.bot.character.socket.emit('join', { name: 'franky' })
+      }
       await this.bot.easyMove({ x: -186.10837647933212, y: 21.54308871590579, map: 'level2w' }).catch(() => {})
       return
     }

@@ -4,6 +4,7 @@ import FinishMonsterHunt from '../../Task/FinishMonsterHunt.js'
 import MonsterHunt from '../../Task/MonsterHunt.js'
 import Bot from '../../Bot/index.js'
 import { botConfig } from '../../types/index.js'
+import { SNtoServerData } from '../../helpers/index.js'
 
 export default class MonsterHuntLoop extends Loop {
   botConfig: botConfig
@@ -26,13 +27,15 @@ export default class MonsterHuntLoop extends Loop {
     }
 
     if (character.s?.monsterhunt?.c === 0) {
-      const FinishMonsterHuntTask = new FinishMonsterHunt(this.bot, 99, this.bot.getServerIdentifier(), this.bot.getServerRegion())
+      const serverData = SNtoServerData(character.s.monsterhunt.sn)
+      const FinishMonsterHuntTask = new FinishMonsterHunt(this.bot, 99, serverData.serverIdentifier, serverData.serverRegion)
       this.bot.queue.addTask(FinishMonsterHuntTask)
       return
     }
 
     if (character.s?.monsterhunt?.id && !this.monsterHuntExcluded(character.s.monsterhunt.id)) {
-      const MonsterHuntTask = new MonsterHunt(this.bot, 99, this.bot.getServerIdentifier(), this.bot.getServerRegion())
+      const serverData = SNtoServerData(character.s.monsterhunt.sn)
+      const MonsterHuntTask = new MonsterHunt(this.bot, 99, serverData.serverIdentifier, serverData.serverRegion)
       this.bot.queue.addTask(MonsterHuntTask)
     }
   }
