@@ -95,7 +95,7 @@ export default class UpgradeBankItems extends Task {
       return await this.removeFromQueue()
     }
 
-    await withdrawBank(this.bot, upgradeableItems)
+    await withdrawBank(this.bot, upgradeableItems, 2)
     await this.bot.easyMove('newupgrade').catch(() => {})
 
     const upgradeableFlattened = Object.values(upgradeableItems).flat().filter(Boolean)
@@ -117,7 +117,7 @@ export default class UpgradeBankItems extends Task {
       }
 
       if (scrollPosition === undefined) {
-        await character.buy(requiredScroll)
+        await character.buy(requiredScroll).catch(() => {})
       }
       scrollPosition = character.locateItem(requiredScroll)
       if (scrollPosition === undefined) continue

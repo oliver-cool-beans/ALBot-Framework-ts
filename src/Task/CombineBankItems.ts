@@ -144,7 +144,7 @@ export default class CombineBankItems extends Task {
       if (scrollPosition === undefined && !character.canBuy(requiredScroll)) continue
 
       if (scrollPosition === undefined) {
-        await character.buy(requiredScroll)
+        await character.buy(requiredScroll).catch(() => {})
       }
       scrollPosition = character.locateItem(requiredScroll)
       if (scrollPosition === undefined) continue

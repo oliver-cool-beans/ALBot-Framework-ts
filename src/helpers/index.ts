@@ -43,11 +43,12 @@ export async function bankItems (bot: Bot, itemsToHold: Array<ItemName>): Promis
   }
 }
 
-export async function withdrawBank (bot, bank: BankInfo) {
+export async function withdrawBank (bot: Bot, bank: BankInfo, esizeLimit: number = 0) {
   const character = bot.character
   for (const slotName in bank) {
     for (const i in bank[slotName]) {
       if (!bank[slotName][i]) continue
+      if (character.esize <= esizeLimit) continue
       bot.logger.info(`${bot.name} withdrawing ${bank[slotName][i].name} from slot ${slotName} index ${i}`)
       await character.withdrawItem(slotName, i, character.getFirstEmptyInventorySlot()).catch((error) => {
         bot.logger.error(`${bot.name} cannot withdraw ${bank[slotName][i].name} - ${error}`)
