@@ -48,24 +48,27 @@ export default class Crabxx {
     }
 
     let target = this.bot.character.entities.get(this.bot.target)
-    target && console.log(target.s)
     if (target?.target && (target.type !== 'crabxx' || target.type !== 'crabx')) {
       this.bot.setTarget(null)
     }
 
-    if (!target || !this.checkTarget(target)) {
+    if (!target?.target && target?.type === 'crabxx') {
       this.bot.setTarget(null)
-      target = this.findTarget('crabx', true) || this.findTarget('crabxx')
+      target = null
+    }
+
+    if (!target || !this.checkTarget(target) || target?.type === 'crabxx') {
+      if (target?.type !== 'crabxx') this.bot.setTarget(null)
+      target = this.findTarget('crabx', true) || this.findTarget('crabx', false) || this.findTarget('crabxx', true)
     }
 
     if (this.bot.character.range <= 50 && !this.bot.target) {
-      const crabxx = this.findTarget('crabx', true)
+      const crabxx = this.findTarget('crabxx', true)
       if (crabxx?.target) target = crabxx
     }
 
     if (!target) {
       this.bot.character.socket.emit('join', { name: 'crabxx' })
-      // await this.bot.easyMove('crabx').catch(() => {})
       return
     }
 
