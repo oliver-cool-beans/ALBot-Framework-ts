@@ -4,7 +4,6 @@ export async function attack (bot: Bot, targetData) {
   const { character } = bot
   if (!targetData?.id) return
 
-  console.log(character.canUse('mentalburst'), targetData.hp <= character.attack)
   if (character.canUse('mentalburst') && targetData.hp <= character.attack && bot.isLowMp(70)) {
     await character.mentalBurst(targetData.id).catch((error) => {
       bot.logger.error(`${bot.name} failed to mentalburst - ${error}`)
