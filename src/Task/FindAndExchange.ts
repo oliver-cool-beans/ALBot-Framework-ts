@@ -53,13 +53,20 @@ export default class FindAndExchange extends Task {
 
   async loop (): Promise<any> {
     const { character } = this.bot
-    if (character.esize <= 0) return this.removeFromQueue()
+    let skipExchange = false
+    if (character.esize <= 2) {
+      return this.removeFromQueue()
+    }
 
     for (const item in this.itemsToExchange) {
+      if (skipExchange) continue
       await this.bot.easyMove({ map: 'bank', x: 0, y: -200 })
       await bankItems(this.bot, this.bot.itemsToHold)
 
-      if (character.esize <= 0) return Promise.resolve('Inventory full')
+      if (character.esize <= 2) {
+        skipExchange = true
+        continue
+      }
 
       const itemName = this.itemsToExchange[item].name || this.itemsToExchange[item]
       let itemData: ItemData, exchangeLocation: IPosition
@@ -73,6 +80,7 @@ export default class FindAndExchange extends Task {
 
         if (!itemData) continue
         if (itemData.name !== itemName) continue
+        if (character.esize <= 2) continue
 
         if ((!gItem.upgrade && !gItem.compound) && gItem.e && (itemData.q || 1) < gItem.e) continue
 

@@ -39,7 +39,7 @@ export async function bankItems (bot: Bot, itemsToHold: Array<ItemName>): Promis
     } catch (e) {
       bot.logger.error(e)
     }
-    await bot.wait(2)
+    await bot.wait(0.5)
   }
 }
 
