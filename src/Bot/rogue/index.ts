@@ -1,4 +1,7 @@
+import { attack } from './strategies/attack.js'
+
 const preLoadFunctions = async (bot: any): Promise<void> => {
+  bot.attackStrategy = attack
 }
 
 const loadFunctions = async (bot: any): Promise<void> => {

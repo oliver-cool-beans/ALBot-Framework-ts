@@ -219,6 +219,10 @@ export default class Bot {
     return (this.character.hp / this.character.max_hp) * 100 <= percent
   }
 
+  isLowMp (percent = 30): Boolean {
+    return (this.character.mp / this.character.max_mp) * 100 <= percent
+  }
+
   setTarget (target: string | null): void {
     this.target = target
   }
