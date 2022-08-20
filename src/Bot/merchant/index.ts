@@ -65,7 +65,7 @@ function scheduleGatheringTasks (bot): void {
   const bankArgs = { itemsToHold: bot.itemsToHold }
   const bankItemsTask = new BankItems(bot, 0, bot.getServerIdentifier(), bot.getServerRegion(), [], [], bankArgs)
 
-  const findOrCraftArgs = { items: [{ name: 'rod', q: 1, level: 0 }, { name: 'pickaxe', q: 1, level: 0 }] }
+  const findOrCraftArgs = { items: [{ name: 'rod', q: 1, level: 0 }, { name: 'pickaxe', q: 1, level: 0 }], craftNotFound: true }
   const findOrCraftTask = new FindOrCraft(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], findOrCraftArgs)
 
   const FishTask = new Gather(bot, 5, bot.getServerIdentifier(), bot.getServerRegion(), [findOrCraftTask], [], { type: 'fishing' })

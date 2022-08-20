@@ -7,11 +7,11 @@ import { findWithdrawBank, findClosestVendor } from '../helpers/index.js'
 
 export default class FindOrCraft extends Task {
   items: Array<ItemData>
-  noFind: Boolean
+  craftNotFound: Boolean
   constructor (bot: Bot, priority: number, serverIdentifier: ServerIdentifier, serverRegion: ServerRegion, onStartTasks: Array<Task> = [], onRemoveTasks: Array<Task> = [], args: taskArgs = {}) {
     super(bot, priority, serverIdentifier, serverRegion, onStartTasks, onRemoveTasks, args)
     this.items = args.items || []
-    this.noFind = args.noFind
+    this.craftNotFound = args.craftNotFound || false
   }
 
   isInInventory (item: ItemData): Boolean {
@@ -51,7 +51,10 @@ export default class FindOrCraft extends Task {
     const bank = character.bank || character.party?.dataPool?.data?.bank
     if (!bank) return await this.bot.easyMove({ map: 'bank', x: 0, y: -200 })
 
-
+    if (this.craftNotFound) { // Only craft it we don't have on in our inventory already
+      await findWithdrawBank(this.bot, this.items)
+      this.items = this.items.filter((item) => !this.isInInventory(item))
+    }
     this.bot.logger.info(`${this.bot.name} crafting these items ${JSON.stringify(this.items)}`)
 
     let item: ItemData
