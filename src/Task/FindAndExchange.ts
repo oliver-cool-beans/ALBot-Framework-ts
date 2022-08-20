@@ -32,13 +32,13 @@ export default class FindAndExchange extends Task {
     return await new Promise(resolve => setTimeout(resolve, 4000))
   }
 
-  async exchangeStack (itemData, exchangeLimit) {
+  async exchangeStack (itemData, exchangeLimit, gItem) {
     const { character } = this.bot
     while (itemData.q >= exchangeLimit) { // Only exchange 10 at a time so we don't flood our inventory and bank
       await new Promise(resolve => setTimeout(resolve, 1000))
       if (!character.canExchange(itemData.name)) break
 
-      const itemLoc = character.locateItem(itemData.name, character.items)
+      const itemLoc = character.items.findIndex((i) => i.name === itemData.name && i.q >= gItem.e)
       itemData = character.items[itemLoc]
       if (!itemLoc && itemLoc !== 0) break
       this.bot.logger.info(`${this.bot.name} qty remaining ${itemData.q}, limit: ${exchangeLimit}`)
@@ -103,7 +103,7 @@ export default class FindAndExchange extends Task {
               continue
             }
             this.bot.logger.info(`${this.bot.name} stack exchanging ${itemData.name}`)
-            await this.exchangeStack(itemData, exchangeLimit)
+            await this.exchangeStack(itemData, exchangeLimit, gItem)
           } catch (error) {
             this.bot.logger.error(`${this.bot.name} error exchanging ${error}`)
           }
