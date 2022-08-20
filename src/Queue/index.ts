@@ -57,11 +57,12 @@ export default class Queue {
   }
 
   removeTask (id: string): boolean {
+    const task = this.findTaskById(id)
+    if (!task) return false
     this.queue = this.queue.filter((task) => task.id !== id)
     this.partyQueue = this.partyQueue.filter((task) => task.id !== id)
     this.sortQueue()
-
-    this.logger.info(`Removed task ${id}, queue size: ${this.queue.length} partyQueue size ${this.partyQueue.length}`)
+    this.logger.info(`Removed task ${task?.constructor?.name} - ${id}, queue size: ${this.queue.length} partyQueue size ${this.partyQueue.length}`)
     return true
   }
 

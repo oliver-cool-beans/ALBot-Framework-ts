@@ -51,26 +51,20 @@ export default class FindOrCraft extends Task {
     const bank = character.bank || character.party?.dataPool?.data?.bank
     if (!bank) return await this.bot.easyMove({ map: 'bank', x: 0, y: -200 })
 
-    let missingItems: Array<ItemData> = this.items
 
-    if (!this.noFind) {
-      await findWithdrawBank(this.bot, this.items)
-      missingItems = this.items.filter((item) => !this.isInInventory(item))
-    }
-
-    this.bot.logger.info(`${this.bot.name} is missing these items ${JSON.stringify(missingItems)}`)
+    this.bot.logger.info(`${this.bot.name} crafting these items ${JSON.stringify(this.items)}`)
 
     let item: ItemData
     let requiredItems: Array<ItemData>
     let itemsToBuy: Array<ItemData>
     let missingRequiredItems: Array<ItemData>
     let craftCounter: number
-    for (const index in missingItems) {
+    for (const index in this.items) {
       craftCounter = 0
       requiredItems = []
       itemsToBuy = []
       missingRequiredItems = []
-      item = missingItems[index]
+      item = this.items[index]
       const gCraft = character.G.craft[item.name]
 
       gCraft.items.forEach((item) => {
@@ -88,7 +82,7 @@ export default class FindOrCraft extends Task {
       missingRequiredItems = requiredItems.filter((item) => !this.isInInventory(item))
 
       if (missingRequiredItems.length) {
-        this.bot.logger.warn(`${this.bot.name} skipping crafing ${item.name} - Required items missing ${missingRequiredItems}`)
+        this.bot.logger.warn(`${this.bot.name} skipping crafing ${item.name} - Required items missing ${JSON.stringify(missingRequiredItems)}`)
         continue
       }
 
