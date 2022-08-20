@@ -39,9 +39,7 @@ export default class AttackLoop extends Loop {
     }
 
     if (this.canAttack(targetData)) {
-      await this.bot.character.basicAttack(targetData?.id).catch((error) => {
-        this.bot.logger.error(`${this.bot.name} failed to attack - ${error}`)
-      })
+      await this.bot.character.basicAttack(targetData?.id).catch(() => {})
     }
   }
 }

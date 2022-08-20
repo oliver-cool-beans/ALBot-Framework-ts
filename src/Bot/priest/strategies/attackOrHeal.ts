@@ -20,9 +20,6 @@ export async function attackOrHeal (bot: Bot, targetData) {
   }
 
   if (character.canUse('attack') && targetData) {
-    await character.basicAttack(targetData.id).catch((error) => {
-      bot.logger.error(`${bot.name} failed to attack - ${error}`)
-    })
+    await character.basicAttack(targetData.id).catch(() => {})
   }
-  await bot.wait(0.5)
 }

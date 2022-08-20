@@ -14,7 +14,6 @@ export async function support (bot: Bot, targetData) {
   })
 
   if (attackingParty.length && character.canUse('absorb')) {
-    console.log('absorbing!!')
     await character.absorbSins(attackingParty[0].target)
   }
 
@@ -33,7 +32,7 @@ export async function support (bot: Bot, targetData) {
 
   const attackingMe = bot.attackingMe()
 
-  if (!attackingMe.length && character.hp < character.max_hp && character.canUse('heal')) {
+  if (!attackingMe.length && character.hp < character.max_hp && character.canUse('heal') && !bot.target) {
     return bot.character.heal(character.id)
   }
 }
