@@ -59,7 +59,7 @@ export default class Crabxx {
 
     if (!target || !this.checkTarget(target) || target?.type === 'crabxx') {
       if (target?.type !== 'crabxx') this.bot.setTarget(null)
-      target = this.findTarget('crabx', true) || this.findTarget('crabx', false) || this.findTarget('crabxx', true)
+      target = this.findTarget('crabx', true) || this.findTarget('crabxx', true)
     }
 
     if (this.bot.character.range <= 50 && !this.bot.target) {
