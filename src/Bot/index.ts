@@ -235,16 +235,11 @@ export default class Bot {
     return this.character?.serverData?.region
   }
 
-  /* async checkBankFor (items: Array<string>): Promise<{[key: string]: number}> {
-    const bankData = this.character.bank
-    if (!bankData) return {}
-    delete bankData.gold
-    const foundItems = Object.values(bankData).flat().reduce((itemArray, item) => {
-      if (item && items.includes(item.name)) {
-        itemArray[item.name] = (itemArray[item.name] || 0) + (item.q || 1)
-      }
-      return itemArray
-    }, {})
-    return foundItems
-  } */
+  async joinEvent (eventName: string | IPosition): Promise<void> {
+    if (this.character.s?.hopsickness) { // Cannot join events with hopsickness
+      await this.easyMove(eventName)
+      return
+    }
+    this.character.socket.emit('join', { name: eventName })
+  }
 }
