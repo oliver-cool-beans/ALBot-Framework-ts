@@ -49,8 +49,7 @@ export default class IceGolem {
     }
 
     if (!target) {
-      this.bot.character.socket.emit('join', { name: 'icegolem' })
-      return
+      return await this.bot.joinEvent('icegolem')
     }
 
     if (target && !this.bot.target) {

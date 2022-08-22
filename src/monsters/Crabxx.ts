@@ -68,8 +68,7 @@ export default class Crabxx {
     }
 
     if (!target) {
-      this.bot.character.socket.emit('join', { name: 'crabxx' })
-      return
+      return await this.bot.joinEvent('crabxx')
     }
 
     if (target && !this.bot.target) {
