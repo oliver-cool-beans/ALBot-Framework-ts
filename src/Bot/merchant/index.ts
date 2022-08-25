@@ -68,8 +68,8 @@ function scheduleGatheringTasks (bot): void {
   const findOrCraftArgs = { items: [{ name: 'rod', q: 1, level: 0 }, { name: 'pickaxe', q: 1, level: 0 }], craftNotFound: true }
   const findOrCraftTask = new FindOrCraft(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], findOrCraftArgs)
 
-  const FishTask = new Gather(bot, 5, bot.getServerIdentifier(), bot.getServerRegion(), [findOrCraftTask], [], { type: 'fishing' })
-  const MineTask = new Gather(bot, 5, bot.getServerIdentifier(), bot.getServerRegion(), [findOrCraftTask], [], { type: 'mining' })
+  const FishTask = new Gather(bot, 5, bot.getServerIdentifier(), bot.getServerRegion(), [findOrCraftTask], [], { type: 'fishing', craftNotFound: true })
+  const MineTask = new Gather(bot, 5, bot.getServerIdentifier(), bot.getServerRegion(), [findOrCraftTask], [], { type: 'mining', craftNotFound: true })
 
   queueTasks(bot, [MineTask, FishTask], { minutes: 5 })
 }

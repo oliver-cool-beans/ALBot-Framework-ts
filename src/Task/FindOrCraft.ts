@@ -16,7 +16,7 @@ export default class FindOrCraft extends Task {
 
   isInInventory (item: ItemData): Boolean {
     return !!this.bot.character.items.find((invItem) => {
-      return invItem && invItem.name === item.name && invItem.level === item.level && item.q === invItem.q
+      return invItem && invItem.name === item.name && invItem.level === item.level && (item.q || 1) === (invItem.q || 1)
     })
   }
 
@@ -51,9 +51,10 @@ export default class FindOrCraft extends Task {
     const bank = character.bank || character.party?.dataPool?.data?.bank
     if (!bank) return await this.bot.easyMove({ map: 'bank', x: 0, y: -200 })
 
+    console.log('craft not found:', this.craftNotFound)
     if (this.craftNotFound) { // Only craft it we don't have on in our inventory already
-      await findWithdrawBank(this.bot, this.items)
       this.items = this.items.filter((item) => !this.isInInventory(item))
+      console.log('items', this.items)
     }
     this.bot.logger.info(`${this.bot.name} crafting these items ${JSON.stringify(this.items)}`)
 
