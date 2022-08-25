@@ -53,7 +53,7 @@ export default class Snowman {
     }
 
     if (!target) {
-      return await this.bot.joinEvent('snowman')
+      await this.bot.easyMove(this.rallyPosition)
     }
 
     if (target && !this.bot.target) {

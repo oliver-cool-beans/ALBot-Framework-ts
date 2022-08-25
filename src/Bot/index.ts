@@ -240,6 +240,7 @@ export default class Bot {
       await this.easyMove(eventName)
       return
     }
+    this.logger.info(`${this.name} joining event ${eventName}`)
     this.character.socket.emit('join', { name: eventName })
   }
 }
