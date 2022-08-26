@@ -32,7 +32,7 @@ export async function support (bot: Bot, targetData) {
 
   const attackingMe = bot.attackingMe()
 
-  if (!attackingMe.length && character.hp < character.max_hp && character.canUse('heal') && !bot.target) {
+  if (!attackingMe.length && character.hp < character.max_hp && character.canUse('heal') && !targetData?.target) {
     return bot.character.heal(character.id)
   }
 }
