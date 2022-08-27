@@ -64,7 +64,7 @@ export async function findWithdrawBank (bot: Bot, items: Array<ItemData>): Promi
     while (!character.bank) {
       bot.logger.info(`${bot.name} waiting for bank items to populate`)
       if (bot.character.map !== 'bank') await bot.easyMove({ map: 'bank', x: 0, y: -200 })
-      bot.wait(0.25)
+      await bot.wait(0.25)
     }
   }
 

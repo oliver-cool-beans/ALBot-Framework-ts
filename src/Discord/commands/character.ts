@@ -29,7 +29,7 @@ export async function interact (interaction, characters, AL) {
 async function login (interaction, characters, AL) {
   const characterName = interaction.options.getString('name')
 
-  // interaction.editReply({ ephemeral: true, content: `Logging in character  ${characterName}` })
+  interaction.editReply({ ephemeral: true, content: `Logging in character  ${characterName}` })
 
   const character = characters.find((char) => char.name.toLowerCase() === characterName)
   if (!character) return
