@@ -16,7 +16,10 @@ export default class FindOrCraft extends Task {
 
   isInInventory (item: ItemData): Boolean {
     return !!this.bot.character.items.find((invItem) => {
-      return invItem && invItem.name === item.name && invItem.level === item.level && (item.q || 1) === (invItem.q || 1)
+      return invItem &&
+      invItem.name === item.name &&
+      invItem.level === item.level &&
+      (invItem.q || 1) >= (item.q || 1)
     })
   }
 

@@ -151,7 +151,7 @@ export default class Bot {
     }
   }
 
-  async run (party: any, discord: any) {
+  async run (party?: any, discord?: any) {
     if (discord) this.discord = discord
     if (party && !this.party) this.party = party
 

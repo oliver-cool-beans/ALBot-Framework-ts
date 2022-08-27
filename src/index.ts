@@ -61,6 +61,19 @@ async function init (): Promise<void> {
   party.start(AL)
 
   logger.info(`Found ${characters.length} characters`)
+
+  if (config?.autoStartCharacters) {
+    logger.info(`Logging in ${Object.keys(config.autoStartCharacters)} characters`)
+    await Promise.all(Object.entries(config.autoStartCharacters).map(async ([name, options]: any) => {
+      const character = characters.find((char) => char.name.toLowerCase() === name.toLowerCase())
+      if (!character) return
+      logger.info(`Starting ${character.name} with options ${JSON.stringify(options)}`)
+      if (options.monster) character.monster = options.monster
+      character.party.addMember(character.name)
+      await character.start(AL)
+      await character.run()
+    }))
+  }
 }
 
 init().catch((error) => {
