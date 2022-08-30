@@ -43,7 +43,11 @@ export type BotParams = {
   logger: any,
   monster: string
   config: botConfig,
-  party: Party
+  party: Party,
+  isExternal: boolean,
+  authCode: string,
+  userId: string,
+  characterId: string
 }
 
 export type taskArgs = {

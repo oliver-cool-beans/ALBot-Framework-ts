@@ -19,7 +19,7 @@ async function init (): Promise<void> {
     config = JSON.parse(config)
   }
 
-  const { pathFinderOptions = {} } = config
+  const { pathFinderOptions = {}, externalCharacters = {} } = config
 
   logger.info(AL_EMAIL)
 
@@ -34,15 +34,20 @@ async function init (): Promise<void> {
 
   const party = new Party([], config, logger)
 
-  const characters = Object.values(AL.Game.characters).map((char: any, index) => {
+  const allCharacters = { ...AL.Game.characters, ...externalCharacters }
+  const characters = Object.values(allCharacters).map((char: any, index) => {
     return new Bot({
       characterName: char.name,
       defaultRegionName: 'ASIA',
+      userId: char.userId,
       defaultRegionIdentifier: 'I',
       characterClass: char.type,
       monster: DEFAULT_MONSTER || 'bee',
       logger,
       config: config || {},
+      isExternal: !!char.external,
+      authCode: char.authCode || '',
+      characterId: char.characterId || '',
       party
     })
   })

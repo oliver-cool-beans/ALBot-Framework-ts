@@ -1,7 +1,20 @@
-import AL, { BankInfo, GMap, IPosition, ItemData, ItemName, ServerIdentifier, ServerRegion } from 'alclient'
+import AL, {
+  BankInfo, GMap, IPosition, ItemData, ItemName, ServerIdentifier, ServerRegion,
+  Mage, Warrior, Rogue, Ranger, Priest, Paladin, Merchant
+} from 'alclient'
 import Bot from '../Bot/index.js'
 import monsters from '../monsters/index.js'
 
+export function getALClientClass (className: string, bot: Bot): Mage | Warrior | Rogue | Ranger | Priest | Paladin | Merchant | undefined {
+  const server = bot.AL.Game.servers[bot.defaultRegionName][bot.defaultRegionIdentifier]
+  if (className === 'mage') return new Mage(bot.userId, bot.authCode, bot.characterId, bot.AL.Game.G, server)
+  if (className === 'warrior') return new Warrior(bot.userId, bot.authCode, bot.characterId, bot.AL.Game.G, server)
+  if (className === 'rogue') return new Rogue(bot.userId, bot.authCode, bot.characterId, bot.AL.Game.G, server)
+  if (className === 'ranger') return new Ranger(bot.userId, bot.authCode, bot.characterId, bot.AL.Game.G, server)
+  if (className === 'priest') return new Priest(bot.userId, bot.authCode, bot.characterId, bot.AL.Game.G, server)
+  if (className === 'paladin') return new Paladin(bot.userId, bot.authCode, bot.characterId, bot.AL.Game.G, server)
+  if (className === 'merchant') return new Merchant(bot.userId, bot.authCode, bot.characterId, bot.AL.Game.G, server)
+}
 export function SNtoServerData (serverName: string): {serverIdentifier: ServerIdentifier, serverRegion: ServerRegion} {
   const serverData = serverName.split(' ')
   return { serverIdentifier: serverData[1] as ServerIdentifier, serverRegion: serverData[0] as ServerRegion }

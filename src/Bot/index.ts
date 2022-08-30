@@ -9,7 +9,7 @@ import priest from './priest/index.js'
 import rogue from './rogue/index.js'
 import { Entity, IPosition, ItemName, MapName, NPCName, ServerIdentifier, ServerRegion } from 'alclient'
 import { attackStrategies, defenceStrategies, moveStrategies } from '../strategies/index.js'
-
+import { getALClientClass } from '../helpers/index.js'
 const characterFunctions: any = { mage, merchant, priest, rogue }
 
 export default class Bot {
@@ -19,6 +19,10 @@ export default class Bot {
   AL: any
   class: string
   name: string
+  isExternal: boolean
+  userId: string
+  authCode: string
+  characterId: string
   defaultRegionName: ServerRegion
   defaultRegionIdentifier: ServerIdentifier
   character: { [key: string]: any }
@@ -57,6 +61,18 @@ export default class Bot {
     this.goldToHold = 1000000
     this.target = null
     this.kitePositions = {}
+    this.isExternal = params.isExternal
+    this.authCode = params.authCode
+    this.userId = params.userId
+    this.characterId = params.characterId
+  }
+
+  private async reconnectFailover (error, callback) {
+    const waitTime = error.match(/_(.*?)_/)?.[1]
+    if (!waitTime) return Promise.reject(error)
+    this.logger.warn(`Timeout detected, waiting, ${parseInt(waitTime)} seconds`)
+    await this.wait(waitTime)
+    return callback().catch((error: any) => Promise.reject(new Error(error)))
   }
 
   private async logInBot (region: string, identifier: string): Promise<any> {
@@ -65,6 +81,15 @@ export default class Bot {
 
     this.state = 'connecting'
 
+    if (this.isExternal && this.authCode && this.userId) {
+      const classType = getALClientClass(this.class, this)
+      if (!classType) return Promise.reject(new Error('Unable to resolve character Class'))
+      await classType.connect().catch(async (error) => {
+        return await this.reconnectFailover(error, async () => await this.character.connect())
+      })
+      return classType
+    }
+    // TODO Replace this code with reconnectFailover
     // Start the character class from ALClient eg startWarrior
     return await this.AL.Game[classFunctionName](this.name, region, identifier).catch(async (error: any) => {
       const waitTime = error.match(/_(.*?)_/)?.[1]

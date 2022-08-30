@@ -15,7 +15,7 @@ export default class MonsterHuntLoop extends Loop {
 
   monsterHuntExcluded (name: string) {
     const mhConfig = this.botConfig?.monsters?.monsterHuntExclude || []
-    return mhConfig.includes(name)
+    return mhConfig.includes(name) || this.bot.character.level < 60
   }
 
   async loop (): Promise<void> {

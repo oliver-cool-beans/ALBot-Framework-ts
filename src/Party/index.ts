@@ -106,7 +106,7 @@ export default class Party {
   async start (AL): Promise<void> {
     this.dataPool.start()
     this.reconnectMemberLoop()
-    this.companionLoop()
+    if (!this.config.disableCompanion) this.companionLoop()
     await Promise.all(this.members.map(async (member, index: number) => {
       member.start(AL).then(() => member.run(this, null))
     }))
