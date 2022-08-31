@@ -36,11 +36,12 @@ async function init (): Promise<void> {
 
   const allCharacters = { ...AL.Game.characters, ...externalCharacters }
   const characters = Object.values(allCharacters).map((char: any, index) => {
+    console.log(char.name, char.serverRegion)
     return new Bot({
       characterName: char.name,
-      defaultRegionName: 'ASIA',
+      defaultRegionName: char.serverRegion || 'ASIA',
       userId: char.userId,
-      defaultRegionIdentifier: 'I',
+      defaultRegionIdentifier: char.serverIdentifier || 'I',
       characterClass: char.type,
       monster: DEFAULT_MONSTER || 'bee',
       logger,
