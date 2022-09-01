@@ -5,8 +5,9 @@ import AL, {
 import Bot from '../Bot/index.js'
 import monsters from '../monsters/index.js'
 
-export function getALClientClass (className: string, bot: Bot): Mage | Warrior | Rogue | Ranger | Priest | Paladin | Merchant | undefined {
-  const server = bot.AL.Game.servers[bot.defaultRegionName][bot.defaultRegionIdentifier]
+export function getALClientClass (className: string, bot: Bot, region?: string, identifier?: string): Mage | Warrior | Rogue | Ranger | Priest | Paladin | Merchant | undefined {
+  const server = bot.AL.Game.servers[region || bot.defaultRegionName][identifier || bot.defaultRegionIdentifier]
+  bot.logger.info(`${bot.name} is connecting to ${JSON.stringify(server)}`)
   if (className === 'mage') return new Mage(bot.userId, bot.authCode, bot.characterId, bot.AL.Game.G, server)
   if (className === 'warrior') return new Warrior(bot.userId, bot.authCode, bot.characterId, bot.AL.Game.G, server)
   if (className === 'rogue') return new Rogue(bot.userId, bot.authCode, bot.characterId, bot.AL.Game.G, server)
@@ -15,6 +16,7 @@ export function getALClientClass (className: string, bot: Bot): Mage | Warrior |
   if (className === 'paladin') return new Paladin(bot.userId, bot.authCode, bot.characterId, bot.AL.Game.G, server)
   if (className === 'merchant') return new Merchant(bot.userId, bot.authCode, bot.characterId, bot.AL.Game.G, server)
 }
+
 export function SNtoServerData (serverName: string): {serverIdentifier: ServerIdentifier, serverRegion: ServerRegion} {
   const serverData = serverName.split(' ')
   return { serverIdentifier: serverData[1] as ServerIdentifier, serverRegion: serverData[0] as ServerRegion }

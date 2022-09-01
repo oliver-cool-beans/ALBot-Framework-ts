@@ -82,10 +82,10 @@ export default class Bot {
     this.state = 'connecting'
 
     if (this.isExternal && this.authCode && this.userId) {
-      const classType = getALClientClass(this.class, this)
+      const classType = getALClientClass(this.class, this, region, identifier)
       if (!classType) return Promise.reject(new Error('Unable to resolve character Class'))
       await classType.connect().catch(async (error) => {
-        return await this.reconnectFailover(error, async () => await this.character.connect())
+        return await this.reconnectFailover(error, async () => await classType.connect())
       })
       return classType
     }
