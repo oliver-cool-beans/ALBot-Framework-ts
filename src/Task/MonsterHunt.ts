@@ -9,7 +9,7 @@ export default class MonsterHunt extends Task {
   proxyMonsterHuntMember: string
   constructor (bot: Bot, priority: number, serverIdentifier: ServerIdentifier, serverRegion: ServerRegion, onStartTasks: Array<Task> = [], onRemoveTasks: Array<Task> = [], args: taskArgs = {}) {
     super(bot, priority, serverIdentifier, serverRegion, onStartTasks, onRemoveTasks, args)
-    this.proxyMonsterHuntMember = args.proxyMonsterHunt
+    this.proxyMonsterHuntMember = args.proxyMonsterHuntMember
     const proxyHunt = this.getPlayerMonsterHunt(this.proxyMonsterHuntMember)
     const id = this.proxyMonsterHuntMember ? proxyHunt?.id : this.bot.character.s.monsterhunt.id
     this.MonsterHandler = new DefaultMonsterHandler(bot, [id])
@@ -27,6 +27,7 @@ export default class MonsterHunt extends Task {
     if (this.proxyMonsterHuntMember && !proxyHunt) return this.removeFromQueue()
 
     const monsterHunt = this.proxyMonsterHuntMember ? proxyHunt?.c : this.bot.character?.s?.monsterhunt?.c
+    console.log(this.bot.name, monsterHunt, proxyHunt, "PROXY MEMBER", this.proxyMonsterHuntMember)
     if (!monsterHunt) return this.removeFromQueue()
     await this.MonsterHandler.loop()
   }

@@ -19,7 +19,11 @@ export default class MonsterHuntLoop extends Loop {
   }
 
   findCharactersWithMH (): Bot | undefined {
-    return this.bot.party.members.find((member) => member.queue.findTaskByName('MonsterHunt'))
+    return this.bot.party.members.find((member) => {
+      return member.queue.findTaskByName('MonsterHunt') &&
+      member.character?.s?.monsterhunt?.id &&
+      !this.monsterHuntExcluded(member.character.s.monsterhunt.id)
+    })
   }
 
   hasValidMonsterHunt (bot: Bot) : boolean {
@@ -53,7 +57,6 @@ export default class MonsterHuntLoop extends Loop {
       const serverData = SNtoServerData(botWithMonsterHunt.character.s.monsterhunt.sn)
       const args = { proxyMonsterHuntMember: botWithMonsterHunt.name }
       const ProxyMonsterHuntTask = new MonsterHunt(this.bot, 99, serverData.serverIdentifier, serverData.serverRegion, [], [], args)
-      console.log('I AM', this.bot.name, 'ADDING PROXY HUNT FOR', botWithMonsterHunt?.name, botWithMonsterHunt?.character?.s?.monsterhunt?.id)
       this.bot.queue.addTask(ProxyMonsterHuntTask)
     }
   }
