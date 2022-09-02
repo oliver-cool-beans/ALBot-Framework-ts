@@ -51,7 +51,7 @@ export default class MonsterHuntLoop extends Loop {
     const botWithMonsterHunt = this.findCharactersWithMH()
     if (!this.hasValidMonsterHunt(this.bot) && botWithMonsterHunt && this.hasValidMonsterHunt(botWithMonsterHunt) && !this.bot.queue.findTaskByName('MonsterHunt')) {
       const serverData = SNtoServerData(botWithMonsterHunt.character.s.monsterhunt.sn)
-      const args = { proxyMonsterHunt: botWithMonsterHunt?.character?.s?.monsterhunt }
+      const args = { proxyMonsterHuntMember: botWithMonsterHunt.name }
       const ProxyMonsterHuntTask = new MonsterHunt(this.bot, 99, serverData.serverIdentifier, serverData.serverRegion, [], [], args)
       console.log('I AM', this.bot.name, 'ADDING PROXY HUNT FOR', botWithMonsterHunt?.name, botWithMonsterHunt?.character?.s?.monsterhunt?.id)
       this.bot.queue.addTask(ProxyMonsterHuntTask)

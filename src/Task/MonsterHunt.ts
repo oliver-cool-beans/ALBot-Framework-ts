@@ -6,16 +6,25 @@ import { taskArgs } from '../types/index.js'
 
 export default class MonsterHunt extends Task {
   MonsterHandler: DefaultMonsterHandler
-  proxyMonsterHunt: any
+  proxyMonsterHuntMember: string
   constructor (bot: Bot, priority: number, serverIdentifier: ServerIdentifier, serverRegion: ServerRegion, onStartTasks: Array<Task> = [], onRemoveTasks: Array<Task> = [], args: taskArgs = {}) {
     super(bot, priority, serverIdentifier, serverRegion, onStartTasks, onRemoveTasks, args)
-    this.proxyMonsterHunt = args.proxyMonsterHunt
-    const id = this.proxyMonsterHunt?.id ? this.proxyMonsterHunt?.id : this.bot.character.s.monsterhunt.id
+    this.proxyMonsterHuntMember = args.proxyMonsterHunt
+    const proxyHunt = this.getPlayerMonsterHunt(this.proxyMonsterHuntMember)
+    const id = proxyHunt?.id || this.bot.character.s.monsterhunt.id
     this.MonsterHandler = new DefaultMonsterHandler(bot, [id])
   }
 
+  private getPlayerMonsterHunt (memberName?: string): {[key: string]: any} | null {
+    if (!memberName) return null
+    const matchedMember = this.bot.party.findMemberByName(memberName)
+    if (!matchedMember || !matchedMember?.character?.s.monsterhunt?.id) return null
+    return matchedMember.character.s.monsterhunt
+  }
+
   async loop (): Promise<void> {
-    const monsterHunt = this.proxyMonsterHunt?.id ? this.proxyMonsterHunt.c : this.bot.character?.s?.monsterhunt?.c
+    const proxyHunt = this.getPlayerMonsterHunt(this.proxyMonsterHuntMember)
+    const monsterHunt = proxyHunt?.id ? proxyHunt.c : this.bot.character?.s?.monsterhunt?.c
     if (!monsterHunt) return this.removeFromQueue()
     await this.MonsterHandler.loop()
   }
