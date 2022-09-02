@@ -1,4 +1,5 @@
 import Bot from '../../../Bot/index.js'
+import { isOnSameServer } from '../../../helpers/index.js'
 
 export async function support (bot: Bot, targetData) {
   const { character } = bot
@@ -19,7 +20,8 @@ export async function support (bot: Bot, targetData) {
 
   const lowHealthPartyMembers = bot.party.members.filter((member) => {
     return member.isLowHp(60) &&
-    member.character.map === character.map
+    member.character.map === character.map &&
+    isOnSameServer(bot, member)
   })
 
   if (bot.isLowHp(40) && character.canUse('partyheal')) {

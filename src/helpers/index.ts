@@ -5,6 +5,10 @@ import AL, {
 import Bot from '../Bot/index.js'
 import monsters from '../monsters/index.js'
 
+export function isOnSameServer (bot1, bot2): boolean {
+  return bot1.getServerIdentifier() === bot2.getServerIdentifier() &&
+  bot1.getServerRegion === bot2.getServerRegion
+}
 export function getALClientClass (className: string, bot: Bot, region?: string, identifier?: string): Mage | Warrior | Rogue | Ranger | Priest | Paladin | Merchant | undefined {
   const server = bot.AL.Game.servers[region || bot.defaultRegionName][identifier || bot.defaultRegionIdentifier]
   bot.logger.info(`${bot.name} is connecting to ${JSON.stringify(server)}`)
