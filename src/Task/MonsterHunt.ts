@@ -11,7 +11,7 @@ export default class MonsterHunt extends Task {
     super(bot, priority, serverIdentifier, serverRegion, onStartTasks, onRemoveTasks, args)
     this.proxyMonsterHuntMember = args.proxyMonsterHunt
     const proxyHunt = this.getPlayerMonsterHunt(this.proxyMonsterHuntMember)
-    const id = proxyHunt?.id || this.bot.character.s.monsterhunt.id
+    const id = this.proxyMonsterHuntMember ? proxyHunt?.id : this.bot.character.s.monsterhunt.id
     this.MonsterHandler = new DefaultMonsterHandler(bot, [id])
   }
 
@@ -24,7 +24,9 @@ export default class MonsterHunt extends Task {
 
   async loop (): Promise<void> {
     const proxyHunt = this.getPlayerMonsterHunt(this.proxyMonsterHuntMember)
-    const monsterHunt = proxyHunt?.id ? proxyHunt.c : this.bot.character?.s?.monsterhunt?.c
+    if (this.proxyMonsterHuntMember && !proxyHunt) return this.removeFromQueue()
+
+    const monsterHunt = this.proxyMonsterHuntMember ? proxyHunt?.c : this.bot.character?.s?.monsterhunt?.c
     if (!monsterHunt) return this.removeFromQueue()
     await this.MonsterHandler.loop()
   }
