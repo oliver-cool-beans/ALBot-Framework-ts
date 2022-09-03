@@ -39,6 +39,7 @@ export default class FindAndUseElixir extends Task {
 
     const elixirLocation = character.locateItem(selectedElixir.name)
     await character.equip(elixirLocation).catch(() => {})
+    await bankItems(this.bot, this.bot.itemsToHold)
     this.bot.logger.info(`${this.bot.name} equipped elixir ${selectedElixir.name}`)
     await this.removeFromQueue()
   }
