@@ -1,4 +1,4 @@
-import { Entity, MapName } from 'alclient'
+import { BankInfo, Entity, MapName } from 'alclient'
 import Bot from '../Bot/index.js'
 import DataPool from './DataPool.js'
 import Companion from 'al-companion-sdk'
@@ -115,5 +115,9 @@ export default class Party {
   findMemberWithTarget (target: string): Entity | null {
     const memberWithTarget = this.members.find((member) => member?.target === target && member?.character.entities.get(target))
     return memberWithTarget ? memberWithTarget.character.entities.get(target) : null
+  }
+
+  getBank (owner): BankInfo | undefined {
+    return this.dataPool?.data?.bank?.[owner]
   }
 }

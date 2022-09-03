@@ -5,7 +5,7 @@ const preLoadFunctions = async (bot: any): Promise<void> => {
 }
 
 const loadFunctions = async (bot: any): Promise<void> => {
-  bot.elixirs = ['elixirdex2', 'elixirdex1', 'elixirdex0']
+  bot.elixirs = [{ name: 'elixirdex2' }, { name: 'elixirdex1' }, { name: 'elixirdex0' }]
 }
 
 const loopFunctions = async (bot: any): Promise<void> => {

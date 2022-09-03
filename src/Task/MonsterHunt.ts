@@ -27,7 +27,6 @@ export default class MonsterHunt extends Task {
     if (this.proxyMonsterHuntMember && !proxyHunt) return this.removeFromQueue()
 
     const monsterHunt = this.proxyMonsterHuntMember ? proxyHunt?.c : this.bot.character?.s?.monsterhunt?.c
-    console.log(this.bot.name, monsterHunt, proxyHunt, "PROXY MEMBER", this.proxyMonsterHuntMember)
     if (!monsterHunt) return this.removeFromQueue()
     await this.MonsterHandler.loop()
   }

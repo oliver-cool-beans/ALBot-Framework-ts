@@ -51,7 +51,7 @@ export default class FindOrCraft extends Task {
 
   async loop (): Promise<any> {
     const { character } = this.bot
-    const bank = character.bank || character.party?.dataPool?.data?.bank
+    const bank = character.bank || character.party.getBank()
     if (!bank) return await this.bot.easyMove({ map: 'bank', x: 0, y: -200 })
 
     console.log('craft not found:', this.craftNotFound)

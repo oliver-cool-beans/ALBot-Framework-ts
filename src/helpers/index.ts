@@ -5,6 +5,18 @@ import AL, {
 import Bot from '../Bot/index.js'
 import monsters from '../monsters/index.js'
 
+export function checkBankFor (items: Array<ItemData>, bank?: BankInfo): {[key: string]: number} {
+  if (!bank) return {}
+  const { gold, ...bankData } = bank
+  const foundItems = Object.values(bankData).flat().reduce((itemArray, item: ItemData) => {
+    if (item && items.find((i) => item.name === i.name && i.level === item.level)) {
+      itemArray[item.name] = (itemArray[item.name] || 0) + (item.q || 1)
+    }
+    return itemArray
+  }, {})
+  return foundItems
+}
+
 export function isOnSameServer (bot1, bot2): boolean {
   return bot1.getServerIdentifier() === bot2.getServerIdentifier() &&
   bot1.getServerRegion === bot2.getServerRegion

@@ -3,7 +3,7 @@ const preLoadFunctions = async (bot: any): Promise<void> => {
 }
 
 const loadFunctions = async (bot: any): Promise<void> => {
-  bot.elixirs = ['elixirint2', 'elixirint1', 'elixirint0']
+  bot.elixirs = [{ name: 'elixirint2' }, { name: 'elixirint1' }, { name: 'elixirint0' }]
 }
 
 const loopFunctions = async (bot: any): Promise<void> => {
