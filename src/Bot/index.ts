@@ -7,7 +7,7 @@ import mage from './mage/index.js'
 import merchant from './merchant/index.js'
 import priest from './priest/index.js'
 import rogue from './rogue/index.js'
-import { Entity, IPosition, ItemName, MapName, NPCName, ServerIdentifier, ServerRegion } from 'alclient'
+import { Entity, IPosition, ItemData, ItemName, MapName, NPCName, ServerIdentifier, ServerRegion } from 'alclient'
 import { attackStrategies, defenceStrategies, moveStrategies } from '../strategies/index.js'
 import { getALClientClass } from '../helpers/index.js'
 const characterFunctions: any = { mage, merchant, priest, rogue }
@@ -32,7 +32,7 @@ export default class Bot {
   discord: any
   loopOverrideList? : Array<string>
   monster: string
-  elixirs: Array<string>
+  elixirs: Array<ItemData>
   strategies: Strategies
   target: string | null
   itemsToHold: Array<ItemName>
@@ -260,9 +260,9 @@ export default class Bot {
     return this.character?.serverData?.region
   }
 
-  async joinEvent (eventName: string | IPosition): Promise<void> {
+  async joinEvent (eventName: string | IPosition, moveLocation?: string | IPosition): Promise<void> {
     if (this.character.s?.hopsickness) { // Cannot join events with hopsickness
-      await this.easyMove(eventName)
+      await this.easyMove(moveLocation || eventName)
       return
     }
     this.logger.info(`${this.name} joining event ${eventName}`)
