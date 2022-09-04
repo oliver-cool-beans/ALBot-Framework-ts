@@ -68,7 +68,7 @@ export async function bankItems (bot: Bot, itemsToHold: Array<ItemName>): Promis
     try {
       await character.depositItem(i)
     } catch (e) {
-      bot.logger.error(e)
+      bot.logger.error(`${bot.name} cannot deposit ${item.name} - ${e}`)
     }
     await bot.wait(0.5)
   }
