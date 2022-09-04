@@ -1,5 +1,8 @@
-const preLoadFunctions = async (bot: any): Promise<void> => {
+import { calculatePotionItems } from '../../helpers/index.js'
 
+const preLoadFunctions = async (bot: any): Promise<void> => {
+  const { hpot, mpot } = calculatePotionItems(bot.level)
+  bot.itemsToHold = [hpot, mpot, 'tracker']
 }
 
 const loadFunctions = async (bot: any): Promise<void> => {
