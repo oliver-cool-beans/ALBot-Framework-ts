@@ -33,7 +33,7 @@ export default class MonsterHuntLoop extends Loop {
   async loop (): Promise<void> {
     const character = this.bot.character
     if (!character?.s?.monsterhunt) {
-      const GetMonsterHuntTask = new GetMonsterHunt(this.bot, 99, this.bot.getServerIdentifier(), this.bot.getServerRegion())
+      const GetMonsterHuntTask = new GetMonsterHunt(this.bot, 99, this.bot.defaultRegionIdentifier, this.bot.defaultRegionName)
       this.bot.queue.addTask(GetMonsterHuntTask)
       return
     }
