@@ -68,7 +68,7 @@ export default class Crabxx {
     }
 
     if (!target) {
-      return await this.bot.joinEvent('crabxx')
+      return await this.bot.joinEvent('crabxx', 'tortoise')
     }
 
     if (target && !this.bot.target) {

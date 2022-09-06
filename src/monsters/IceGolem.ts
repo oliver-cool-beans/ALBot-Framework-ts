@@ -31,7 +31,7 @@ export default class IceGolem {
 
   async loop (targetData: Entity, taskId: string, task): Promise<void> {
     if (this.bot.isOnServer(task.serverIdentifier, task.serverRegion) && !this.bot.character?.S?.icegolem?.live) {
-      console.log('Icegolem is no longer live, removing task')
+      this.bot.logger.info(`${this.bot} Icegolem is no longer live, removing task`)
       this.bot.party.members.forEach((member) => {
         return member.queue.removeTask(taskId)
       })
@@ -50,6 +50,13 @@ export default class IceGolem {
 
     if (!target) {
       return await this.bot.joinEvent('icegolem')
+    }
+
+    if (target?.target && this.bot.party.findMemberByName(target.target)) {
+      this.bot.logger.info(`${this.bot} Icegolem has our party as target ${target.target} removing task`)
+      this.bot.party.members.forEach((member) => {
+        return member.queue.removeTask(taskId)
+      })
     }
 
     if (target && !this.bot.target) {

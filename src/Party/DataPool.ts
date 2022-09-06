@@ -33,7 +33,7 @@ class DataPool {
       if (this.addedTaskBuffer.length > 10) this.addedTaskBuffer = this.addedTaskBuffer.slice(2)
       this.party.members.forEach((member) => {
         if (!isActiveEvent(event, member.config)) return
-        if (member.character.ctype === 'merchant') return
+        if (!member.character.ctype || member.character.ctype === 'merchant') return
         const SpecialMonsterTask = new SpecialMonster(member, undefined, event.serverIdentifier, event.serverRegion, [], [], args)
         if (this.addedTaskBuffer.find((task) => task.botName === member.name && task.id === event.id)) {
           this.addedTaskBuffer.push({ botName: member.name, id: SpecialMonsterTask.id })
@@ -49,7 +49,7 @@ class DataPool {
     this.refreshAlData()
     this.refreshBankData()
     schedule.scheduleJob('*/1 * * * *', () => this.refreshAlData())
-    schedule.scheduleJob('*/20 * * * *', () => this.refreshBankData())
+    schedule.scheduleJob('*/10 * * * *', () => this.refreshBankData())
   }
 
   async refreshAlData () {
@@ -69,9 +69,22 @@ class DataPool {
   }
 
   async refreshBankData () {
-    const memberWithBank = this.party.allBots.find((bot) => bot.character && bot.character.bank && Object.keys(bot.character.bank).length > 1)
-    if (!memberWithBank) return
-    this.data.bank = memberWithBank.character.bank
+    const allOwners = this.party.members.reduce((list, member) => {
+      if (!member.character) return list
+      if (!list.includes(member.character.owner)) list.push(member.character.owner)
+      return list
+    }, [] as Array<string>)
+
+    allOwners.forEach((owner) => {
+      const memberWithBank = this.party.allBots.find((bot) => {
+        return bot.character &&
+        bot.character.owner === owner &&
+        bot.character.bank &&
+        Object.keys(bot.character.bank).length > 1
+      })
+      if (!memberWithBank) return
+      this.data.bank[owner] = memberWithBank.character.bank
+    })
   }
 }
 

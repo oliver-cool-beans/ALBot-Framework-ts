@@ -56,6 +56,10 @@ export default class Queue {
     this.partyQueue.find((queueTask) => queueTask.id === id)
   }
 
+  findTaskByName (name: string): Task | undefined {
+    return this.queue.find((queueTask) => queueTask?.constructor?.name === name)
+  }
+
   removeTask (id: string): boolean {
     const task = this.findTaskById(id)
     if (!task) return false

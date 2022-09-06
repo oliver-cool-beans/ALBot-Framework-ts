@@ -1,4 +1,4 @@
-import { Entity, MapName } from 'alclient'
+import { BankInfo, Entity, MapName } from 'alclient'
 import Bot from '../Bot/index.js'
 import DataPool from './DataPool.js'
 import Companion from 'al-companion-sdk'
@@ -106,7 +106,7 @@ export default class Party {
   async start (AL): Promise<void> {
     this.dataPool.start()
     this.reconnectMemberLoop()
-    this.companionLoop()
+    if (!this.config.disableCompanion) this.companionLoop()
     await Promise.all(this.members.map(async (member, index: number) => {
       member.start(AL).then(() => member.run(this, null))
     }))
@@ -115,5 +115,9 @@ export default class Party {
   findMemberWithTarget (target: string): Entity | null {
     const memberWithTarget = this.members.find((member) => member?.target === target && member?.character.entities.get(target))
     return memberWithTarget ? memberWithTarget.character.entities.get(target) : null
+  }
+
+  getBank (owner): BankInfo | undefined {
+    return this.dataPool?.data?.bank?.[owner]
   }
 }

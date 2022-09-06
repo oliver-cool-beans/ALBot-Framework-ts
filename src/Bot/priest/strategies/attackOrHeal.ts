@@ -1,4 +1,5 @@
 import Bot from '../../../Bot/index.js'
+import { isOnSameServer } from '../../../helpers/index.js'
 
 export async function attackOrHeal (bot: Bot, targetData) {
   const { character } = bot
@@ -9,7 +10,8 @@ export async function attackOrHeal (bot: Bot, targetData) {
 
     const lowHealthPartyMembers = bot.party.members.filter((member) => {
       return member.isLowHp(60) &&
-      bot.AL.Tools.distance(character, member.character) < character.range
+      bot.AL.Tools.distance(character, member.character) < character.range &&
+      isOnSameServer(bot, member)
     })
 
     if (lowHealthPartyMembers.length) {

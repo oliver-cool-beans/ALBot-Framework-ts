@@ -9,7 +9,7 @@ export default class SellInStand extends Task {
   itemsToSell: Array<{name: ItemName, level: number, q: number, price: number}>
   constructor (bot: Bot, priority: number, serverIdentifier: ServerIdentifier, serverRegion: ServerRegion, onStartTasks: Array<Task> = [], onRemoveTasks: Array<Task> = [], args: taskArgs = {}) {
     super(bot, priority, serverIdentifier, serverRegion, onStartTasks, onRemoveTasks, args)
-    this.standPosition = { map: 'main', x: 180.821266, y: -66.94612 }
+    this.standPosition = { map: 'main', x: 180.821266 + (Math.random() * 100), y: -66.94612 }
     this.itemsToSell = args.itemsToSell || []
   }
 

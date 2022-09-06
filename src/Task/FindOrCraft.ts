@@ -51,10 +51,9 @@ export default class FindOrCraft extends Task {
 
   async loop (): Promise<any> {
     const { character } = this.bot
-    const bank = character.bank || character.party?.dataPool?.data?.bank
+    const bank = character.bank || character.party.getBank()
     if (!bank) return await this.bot.easyMove({ map: 'bank', x: 0, y: -200 })
 
-    console.log('craft not found:', this.craftNotFound)
     if (this.craftNotFound) { // Only craft it we don't have on in our inventory already
       this.items = this.items.filter((item) => !this.isInInventory(item))
       console.log('items', this.items)
@@ -86,7 +85,7 @@ export default class FindOrCraft extends Task {
       })
 
       await findWithdrawBank(this.bot, requiredItems)
-      missingRequiredItems = requiredItems.filter((item) => !this.isInInventory(item))
+      missingRequiredItems = requiredItems.filter((item: any) => !this.isInInventory({ ...item, q: item.qty }))
 
       if (missingRequiredItems.length) {
         this.bot.logger.warn(`${this.bot.name} skipping crafing ${item.name} - Required items missing ${JSON.stringify(missingRequiredItems)}`)
