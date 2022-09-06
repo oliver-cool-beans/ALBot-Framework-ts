@@ -33,7 +33,7 @@ class DataPool {
       if (this.addedTaskBuffer.length > 10) this.addedTaskBuffer = this.addedTaskBuffer.slice(2)
       this.party.members.forEach((member) => {
         if (!isActiveEvent(event, member.config)) return
-        if (member.character.ctype === 'merchant') return
+        if (!member.character.ctype || member.character.ctype === 'merchant') return
         const SpecialMonsterTask = new SpecialMonster(member, undefined, event.serverIdentifier, event.serverRegion, [], [], args)
         if (this.addedTaskBuffer.find((task) => task.botName === member.name && task.id === event.id)) {
           this.addedTaskBuffer.push({ botName: member.name, id: SpecialMonsterTask.id })
