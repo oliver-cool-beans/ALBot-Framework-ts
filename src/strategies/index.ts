@@ -5,6 +5,7 @@ import CBurstPull from './CBurstPull.js'
 import DoNothing from './DoNothing.js'
 import PartyPull from './PartyPull.js'
 import KiteInCircle from './KiteInCircle.js'
+import ThreeShot from './ThreeShot.js'
 
 export const moveStrategies = {
   kiteTarget: KiteTarget,
@@ -17,7 +18,8 @@ export const attackStrategies = {
   attackTankTarget: AttackTankTarget,
   cburstPull: CBurstPull,
   doNothing: DoNothing,
-  partyPull: PartyPull
+  partyPull: PartyPull,
+  threeShot: ThreeShot
 }
 
 export const defenceStrategies = {
