@@ -33,7 +33,7 @@ export default class Franky {
 
   async loop (targetData: Entity, taskId: string, task): Promise<void> {
     if (this.bot.isOnServer(task.serverIdentifier, task.serverRegion) && !this.bot.character?.S?.franky?.live) {
-      console.log('Franky is no longer live, removing task')
+      this.bot.logger.info(`${this.bot} Franky is no longer live, removing task`)
       this.bot.party.members.forEach((member) => {
         return member.queue.removeTask(taskId)
       })
@@ -56,6 +56,13 @@ export default class Franky {
       }
       await this.bot.easyMove({ x: -186.10837647933212, y: 21.54308871590579, map: 'level2w' }).catch(() => {})
       return
+    }
+
+    if (target?.target && this.bot.party.findMemberByName(target.target)) {
+      this.bot.logger.info(`${this.bot} Franky has our party as target ${target.target} removing task`)
+      this.bot.party.members.forEach((member) => {
+        return member.queue.removeTask(taskId)
+      })
     }
 
     if (target && !this.bot.target) {
