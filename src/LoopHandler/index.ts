@@ -17,6 +17,10 @@ export default class LoopHandler {
         this.bot.logger.info(`${this.bot.name} ignorning loop ${name} - overidden`)
         return
       }
+      if (this.bot.loopIgnoreList.includes(name)) {
+        this.bot.logger.info(`${this.bot.name} ignorning loop ${name} - ignored`)
+        return
+      }
       const loopClass = new LoopClass(this.bot)
       loopClass.start()
       this.loops.push({ name, class: loopClass })

@@ -22,6 +22,7 @@ export default class MonsterHuntLoop extends Loop {
     return this.bot.party.members.find((member) => {
       return member.queue.findTaskByName('MonsterHunt') &&
       member.character?.s?.monsterhunt?.id &&
+      member.character.owner === this.bot.character.owner &&
       !this.monsterHuntExcluded(member.character.s.monsterhunt.id)
     })
   }

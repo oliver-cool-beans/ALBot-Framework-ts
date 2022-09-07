@@ -19,7 +19,7 @@ async function init (): Promise<void> {
     config = JSON.parse(config)
   }
 
-  const { pathFinderOptions = {}, externalCharacters = {} } = config
+  const { pathFinderOptions = {}, characterOptions = {} } = config
 
   logger.info(AL_EMAIL)
 
@@ -34,9 +34,14 @@ async function init (): Promise<void> {
 
   const party = new Party([], config, logger)
 
+  const externalCharacters = Object.entries(characterOptions).reduce((list, [name, options]: any) => {
+    if (!options.external || list[name]) return list
+    list[name] = options
+    return list
+  }, {} as any)
+
   const allCharacters = { ...AL.Game.characters, ...externalCharacters }
   const characters = Object.values(allCharacters).map((char: any, index) => {
-    console.log(char.name, char.serverRegion)
     return new Bot({
       characterName: char.name,
       defaultRegionName: char.serverRegion || 'ASIA',
@@ -68,13 +73,15 @@ async function init (): Promise<void> {
 
   logger.info(`Found ${characters.length} characters`)
 
-  if (config?.autoStartCharacters) {
-    logger.info(`Logging in ${Object.keys(config.autoStartCharacters)} characters`)
-    await Promise.all(Object.entries(config.autoStartCharacters).map(async ([name, options]: any) => {
+  if (Object.keys(characterOptions)) {
+    logger.info(`Logging in ${Object.keys(characterOptions)} characters`)
+    await Promise.all(Object.entries(characterOptions).map(async ([name, options]: any) => {
       const character = characters.find((char) => char.name.toLowerCase() === name.toLowerCase())
       if (!character) return
       logger.info(`Starting ${character.name} with options ${JSON.stringify(options)}`)
-      if (options.monster) character.monster = options.monster
+      Object.entries(options?.botConfig).forEach(([key, value]) => {
+        character[key] = value
+      })
       character.party.addMember(character.name)
       await character.start(AL)
       await character.run()

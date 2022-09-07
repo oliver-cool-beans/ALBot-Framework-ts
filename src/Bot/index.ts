@@ -31,6 +31,7 @@ export default class Bot {
   queue: Queue
   discord: any
   loopOverrideList? : Array<string>
+  loopIgnoreList: Array<string> = []
   monster: string
   elixirs: Array<ItemData>
   strategies: Strategies
@@ -40,6 +41,7 @@ export default class Bot {
   attackStrategy: Function | undefined
   defenceStrategy: Function | undefined
   kitePositions: { [key: string]: any }
+  ignoreServerList: Array<{ region?: string, identifier?: string}> = []
   constructor (params: BotParams) {
     this.state = 'stopped'
     this.config = params.config
