@@ -28,7 +28,11 @@ export default class FindAndUseElixir extends Task {
       return await this.bot.wait(2)
     }
 
-    const selectedElixir = this.elixirs[0]
+    const selectedElixir = this.elixirs.find((elixir) => this.isInInventory(elixir))
+    if (!selectedElixir) {
+      this.bot.logger.info(`${this.bot.name} No valid elixirs found - removing task`)
+      return await this.removeFromQueue()
+    }
     await findWithdrawBank(this.bot, [selectedElixir])
 
     if (!this.isInInventory(selectedElixir)) {
