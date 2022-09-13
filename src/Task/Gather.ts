@@ -47,6 +47,7 @@ export default class Gather extends Task {
       await character[functionName]().catch((error) => {
         this.bot.logger.error(`${this.bot.name} failed to ${functionName} - ${error}`)
       })
+      await this.bot.wait(1)
     }
 
     await character.unequip('mainhand')
