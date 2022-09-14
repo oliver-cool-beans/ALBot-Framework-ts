@@ -124,6 +124,7 @@ export default class UpgradeBankItems extends Task {
 
       this.bot.logger.info(`${this.bot.name} upgrading ${JSON.stringify(item)}`)
       await character.upgrade(i, scrollPosition)
+      await this.bot.wait(3)
     }
 
     await this.bot.easyMove(this.bankingPosition).catch(() => {})
