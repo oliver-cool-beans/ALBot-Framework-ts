@@ -51,7 +51,7 @@ export default class FindOrCraft extends Task {
 
   async loop (): Promise<any> {
     const { character } = this.bot
-    const bank = character.bank || character.party.getBank()
+    const bank = character.bank || this.bot.party.getBank(character.owner)
     if (!bank) return await this.bot.easyMove({ map: 'bank', x: 0, y: -200 })
 
     if (this.craftNotFound) { // Only craft it we don't have on in our inventory already
