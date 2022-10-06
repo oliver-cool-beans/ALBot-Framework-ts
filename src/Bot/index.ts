@@ -83,23 +83,31 @@ export default class Bot {
 
     this.state = 'connecting'
 
-    if (this.isExternal && this.authCode && this.userId) {
-      const classType = getALClientClass(this.class, this, region, identifier)
-      if (!classType) return Promise.reject(new Error('Unable to resolve character Class'))
-      await classType.connect().catch(async (error) => {
-        return await this.reconnectFailover(error, async () => await classType.connect())
-      })
-      return classType
+    let success = false
+    let callback
+    let classType: any = null
+    let character: any = null
+    while (!success) {
+      try {
+        if (this.isExternal && this.authCode && this.userId) {
+          classType = getALClientClass(this.class, this, region, identifier)
+          if (!classType) return Promise.reject(new Error('Unable to resolve character Class'))
+          callback = classType.connect
+        } else {
+          callback = async () => this.AL.Game[classFunctionName](this.name, region, identifier)
+        }
+        character = await callback()
+        if (character?.ready) success = true
+      } catch (error) {
+        this.logger.error(`${this.name} - error`)
+        character = await this.reconnectFailover(error, callback).catch(() => {
+          return false
+        })
+        if (character?.ready) success = true
+      }
+      await this.wait(10)
     }
-    // TODO Replace this code with reconnectFailover
-    // Start the character class from ALClient eg startWarrior
-    return await this.AL.Game[classFunctionName](this.name, region, identifier).catch(async (error: any) => {
-      const waitTime = error.match(/_(.*?)_/)?.[1]
-      if (!waitTime) return Promise.reject(error)
-      this.logger.warn(`Timeout detected, waiting, ${parseInt(waitTime)} seconds`)
-      await this.wait(waitTime)
-      return await this.AL.Game[classFunctionName](this.name, region, identifier).catch((error: any) => Promise.reject(new Error(error)))
-    })
+    return character
   }
 
   private createListeners (): void {
