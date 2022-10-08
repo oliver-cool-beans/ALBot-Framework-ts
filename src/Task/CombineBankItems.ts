@@ -94,11 +94,16 @@ export default class CombineBankItems extends Task {
     !item.l
   }
 
+  isNotRecycleable (item: ItemData): boolean {
+    const recycleItems = this.bot.config.itemsToRecycle || []
+    return !recycleItems.find((i: ItemData) => i.name === item.name && i.level === item.level)
+  }
+
   findCombinableItems (bank: BankInfo): BankInfo {
     return Object.entries(bank).reduce((bankData, [slotName, slotItems]) => {
       if (slotName === 'gold') return bankData
       if (typeof slotItems === 'number') return bankData
-      bankData[slotName] = slotItems.map((item: ItemData) => this.isValidCompoundable(item) && item)
+      bankData[slotName] = slotItems.map((item: ItemData) => this.isNotRecycleable(item) && this.isValidCompoundable(item) && item)
       return bankData
     }, {} as BankInfo)
   }

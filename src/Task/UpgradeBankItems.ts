@@ -66,7 +66,7 @@ export default class UpgradeBankItems extends Task {
     if (!item || item.level === undefined) return false
     return this.bot.AL.Game.G.items[item.name]?.upgrade &&
     item.level < this.levelCap &&
-    !item.l
+    !item.l && this.isNotRecycleable(item)
   }
 
   findUpgradeableItems (bank: BankInfo): BankInfo {
@@ -76,6 +76,11 @@ export default class UpgradeBankItems extends Task {
       bankData[slotName] = slotItems.map((item: ItemData) => this.isValidUpgradeable(item) && item)
       return bankData
     }, {} as BankInfo)
+  }
+
+  isNotRecycleable (item: ItemData): boolean {
+    const recycleItems = this.bot.config.itemsToRecycle || []
+    return !recycleItems.find((i: ItemData) => i.name === item.name && i.level === item.level)
   }
 
   async loop (): Promise<void> {

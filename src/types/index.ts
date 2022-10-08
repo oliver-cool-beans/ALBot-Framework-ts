@@ -20,7 +20,7 @@ export type botConfig = {
   itemsToSell: Array<{ name: ItemName, level?: number}>,
   itemsToExchange: Array<{ name: ItemName, level?: number}>,
   itemsToCraft: Array<ItemName>
-  itemsToRecycle: Array<ItemName>
+  itemsToRecycle: Array<{ name: ItemName, level?: number}>,
   itemLimits: Array<ItemData>
   monsters: {
     noSolo: Array<string>,
