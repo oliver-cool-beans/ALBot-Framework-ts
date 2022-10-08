@@ -9,6 +9,7 @@ import CombineBankItems from '../../Task/CombineBankItems.js'
 import UpgradeBankItems from '../../Task/UpgradeBankItems.js'
 import FindOrCraft from '../../Task/FindOrCraft.js'
 import FindAndExchange from '../../Task/FindAndExchange.js'
+import FindAndRecycle from '../../Task/FindAndRecycle.js'
 
 const scheduler = new ToadScheduler()
 
@@ -58,7 +59,9 @@ function scheduleBankTasks (bot: Bot): void {
   const findOrCraftItemsArgs = { items: bot.config.itemsToCraft }
   const findOrCraftItemsTask = new FindOrCraft(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], findOrCraftItemsArgs)
 
-  queueTasks(bot, [CombineTask, UpgradeTask, FindAndExchangeTask, findOrCraftItemsTask], { minutes: 10 })
+  const findAndRecycleArgs = { items: bot.config.itemsToRecycle }
+  const findAndRecycleTask = new FindAndRecycle(bot, 1, bot.getServerIdentifier(), bot.getServerRegion(), [bankItemsTask], [], findAndRecycleArgs)
+  queueTasks(bot, [CombineTask, UpgradeTask, FindAndExchangeTask, findOrCraftItemsTask, findAndRecycleTask], { minutes: 10 })
 }
 
 function scheduleGatheringTasks (bot): void {
