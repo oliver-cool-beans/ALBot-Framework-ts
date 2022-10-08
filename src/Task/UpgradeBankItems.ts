@@ -79,6 +79,7 @@ export default class UpgradeBankItems extends Task {
   }
 
   isNotRecycleable (item: ItemData): boolean {
+    if (!item?.name) return false
     const recycleItems = this.bot.config.itemsToRecycle || []
     return !recycleItems.find((i: ItemData) => i.name === item.name && i.level === item.level)
   }
