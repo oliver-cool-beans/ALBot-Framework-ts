@@ -97,7 +97,7 @@ export default class CombineBankItems extends Task {
   isNotRecycleable (item: ItemData): boolean {
     if (!item?.name) return false
     const recycleItems = this.bot.config.itemsToRecycle || []
-    return !recycleItems.find((i: ItemData) => i.name === item.name && i.level === item.level)
+    return !recycleItems.find((i: ItemData) => i.name === item.name)
   }
 
   findCombinableItems (bank: BankInfo): BankInfo {
